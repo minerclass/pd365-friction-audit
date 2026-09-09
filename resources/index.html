@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<style>*{box-sizing:border-box}html{color-scheme:light dark}body{margin:0;font:14px/1.5 system-ui,sans-serif;background:#f4f6f8}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Illinois Device Policy Resource Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#f4f6f8; --surface:#ffffff; --sunk:#e9edf1;
+  --ink:#14202b; --ink-soft:#3d4a57; --muted:#5c6873;
+  --rule:#d7dde4; --rule-strong:#b6c0ca;
+  --accent:#1d4e6f; --accent-soft:#e5edf3; --on-accent:#ffffff;
+  --signal:#8c6014; --signal-soft:#f6efe0;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+    --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+    --rule:#2a3742; --rule-strong:#3d4c59;
+    --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+    --signal:#d7a747; --signal-soft:#2a2214;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+  --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+  --rule:#2a3742; --rule-strong:#3d4c59;
+  --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+  --signal:#d7a747; --signal-soft:#2a2214;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.page{max-width:1000px;margin:0 auto;padding:44px 24px 88px}
+@media(max-width:640px){.page{padding:28px 16px 60px}}
+h1,h2,h3{font-family:Newsreader,Georgia,"Times New Roman",serif;margin:0;font-weight:600;text-wrap:balance;line-height:1.14}
+h1{font-size:clamp(2rem,4.6vw,2.9rem);letter-spacing:-.015em}
+h2{font-size:1.45rem}
+h3{font-size:1.06rem}
+p{margin:0}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.masthead{display:flex;flex-direction:column;gap:13px;padding-bottom:24px;border-bottom:2px solid var(--ink)}
+.deck-line{font-size:1.05rem;color:var(--ink-soft);max-width:66ch}
+.deck-line em{color:var(--ink);font-style:italic}
+.origin{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);letter-spacing:.05em;display:flex;flex-wrap:wrap;gap:6px 22px;padding-top:6px}
+
+section{margin-top:50px}
+.sec-head{display:flex;align-items:baseline;gap:14px;padding-bottom:9px;border-bottom:1px solid var(--rule-strong);margin-bottom:22px;flex-wrap:wrap}
+.sec-head .eyebrow{margin-left:auto}
+.lede{font-size:1rem;color:var(--ink-soft);max-width:68ch;margin-bottom:24px}
+.lede em{color:var(--ink);font-style:italic}
+.lede strong{color:var(--ink)}
+
+/* anchor card */
+.anchor{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--signal);border-radius:3px;padding:22px 24px;display:flex;flex-direction:column;gap:13px}
+.anchor .tag{font-family:"IBM Plex Mono",monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--signal)}
+.anchor h3{font-size:1.3rem}
+.anchor p{font-size:.97rem;color:var(--ink-soft);max-width:68ch}
+.anchor .go{font-family:"IBM Plex Mono",monospace;font-size:.8rem;font-weight:600;word-break:break-all}
+
+/* entries */
+.entries{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:3px;background:var(--surface);overflow:hidden}
+.entry{padding:18px 20px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:8px}
+.entry:last-child{border-bottom:none}
+.entry .top{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.entry .kind{font-family:"IBM Plex Mono",monospace;font-size:.61rem;letter-spacing:.11em;text-transform:uppercase;font-weight:600;padding:2px 7px;border-radius:2px;background:var(--accent-soft);color:var(--accent);flex:none}
+.entry .kind.own{background:var(--signal-soft);color:var(--signal)}
+.entry h3{font-size:1.04rem;flex:1;min-width:220px}
+.entry .cite{font-size:.86rem;color:var(--muted);font-style:italic;max-width:72ch}
+.entry .what{font-size:.93rem;color:var(--ink-soft);max-width:72ch}
+.entry .lic{font-size:.9rem;padding:9px 12px;border-radius:2px;background:var(--sunk);max-width:72ch;line-height:1.5;display:flex;flex-direction:column;gap:5px}
+.entry .lic b{font-family:"IBM Plex Mono",monospace;font-size:.61rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.entry .lic .yes{color:var(--ink)}
+.entry .lic .no{color:var(--ink)}
+.entry .lic .no::before{content:"Does not support: ";font-weight:600;color:var(--signal)}
+.entry .lic .yes::before{content:"Supports: ";font-weight:600;color:var(--accent)}
+.entry .url{font-family:"IBM Plex Mono",monospace;font-size:.75rem;word-break:break-all}
+
+/* checklist split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+@media(max-width:800px){.split{grid-template-columns:1fr}}
+.split > div{padding:19px 21px;background:var(--surface);display:flex;flex-direction:column;gap:11px}
+.split > div:first-child{border-right:1px solid var(--rule);background:var(--sunk)}
+@media(max-width:800px){.split > div:first-child{border-right:none;border-bottom:1px solid var(--rule)}}
+.split h3{font-size:1.08rem}
+ul.tick{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+ul.tick li{display:flex;gap:10px;align-items:baseline;font-size:.91rem;color:var(--ink-soft)}
+ul.tick li::before{content:"\2713";color:var(--accent);font-weight:700;flex:none;font-size:.85rem}
+ul.gap li::before{content:"\2013";color:var(--signal);font-weight:700}
+
+.statbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:15px 17px;display:flex;flex-direction:column;gap:5px}
+.stat .n{font-family:"IBM Plex Mono",monospace;font-size:1.7rem;font-weight:600;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.stat.hot .n{color:var(--signal)}
+.stat .l{font-size:.85rem;color:var(--ink-soft);line-height:1.4}
+.stat .s{font-family:"IBM Plex Mono",monospace;font-size:.62rem;color:var(--muted);letter-spacing:.06em}
+
+.callout{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--signal);border-radius:2px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.callout .tag{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--signal)}
+.callout p{font-size:.94rem;color:var(--ink-soft);max-width:70ch}
+.callout p strong{color:var(--ink)}
+
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:.84rem;color:var(--muted);max-width:70ch;display:flex;flex-direction:column;gap:8px}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <p class="eyebrow">The Friction Audit &middot; Participant Takeaway</p>
+  <h1>Illinois Device Policy Resource Set</h1>
+  <p class="deck-line">Everything cited in the session, annotated with what each source supports and what it does not. <em>The annotations matter more than the links.</em> Most of what goes wrong in a board meeting is a real study stated one step too strongly.</p>
+  <div class="origin">
+    <span>PD365 &middot; October 27, 2026</span><span>Micah Miner, M.Ed., Ed.S., CETL</span><span>Current as of September 2026</span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><h2>Start here</h2><span class="eyebrow">The argument</span></div>
+  <div class="anchor">
+    <span class="tag">The piece this workshop is built on</span>
+    <h3>The Pouch and the Bypass</h3>
+    <p>The full argument, the four-lens read on the research literature, the district audit protocol in its original form, and the distinction between five different policy types that districts routinely collapse into one. If a board member asks why you are auditing a policy the state already wrote for you, send them this rather than a summary of it.</p>
+    <p>It also carries the reading this session compresses: Odgers and Haidt held in productive tension rather than resolved, the Dutch evaluation read against SMART Schools, and the interpretive caution that a policy announcement documents intent rather than outcome.</p>
+    <p class="go"><a href="https://minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/">minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>What the state already told you</h2><span class="eyebrow">ISBE, August 2026</span></div>
+  <p class="lede">These figures are ISBE&rsquo;s own, published inside the <em>Model Cell Phone Policy</em> from the Phones in Focus study run with Harvard&rsquo;s Center for Education Policy Research. <strong>The third one is the reason this workshop exists</strong> &mdash; the state named the laptop problem in the same document that directs you to solve the phone problem.</p>
+  <div class="statbar">
+    <div class="stat"><span class="n">60&rarr;74%</span><span class="l">Schools with bell-to-bell bans, 2024&ndash;25 to 2025&ndash;26</span><span class="s">National sample</span></div>
+    <div class="stat"><span class="n">9 in 10</span><span class="l">Elementary and middle schools with bell-to-bell policies</span><span class="s">vs. 5 in 10 high schools</span></div>
+    <div class="stat hot"><span class="n">1 in 3</span><span class="l">Students teachers estimate are using laptops for nonacademic purposes at school</span><span class="s">Phones in Focus</span></div>
+    <div class="stat"><span class="n">52%</span><span class="l">School leaders reporting negative effects on academics, mental health, attention</span><span class="s">NCES, Dec 2024</span></div>
+  </div>
+
+  <div class="split">
+    <div>
+      <h3>What the ISBE template decides for you</h3>
+      <ul class="tick">
+        <li>The definition of a wireless communication device, and what &ldquo;school time&rdquo; can mean</li>
+        <li>Five required exceptions: medical, IEP/504, English learners, student caregivers, other law</li>
+        <li>Two optional exceptions: high school lunch and passing periods, and educational use authorized by school personnel</li>
+        <li>Storage options: lockers, backpacks, classroom holders, locked pouches, the office</li>
+        <li>Prohibited enforcement: no fees, fines, suspensions, expulsions, SRO deployment, or police for a device violation alone</li>
+        <li>A required parent retrieval alternative for guardians who cannot appear in person</li>
+        <li>Publication annually, and review at least every three years with stakeholder input</li>
+        <li>Mandated input from the teachers&rsquo; bargaining agent, administrators, and parents. Student input is encouraged</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What it leaves entirely to you</h3>
+      <ul class="tick gap">
+        <li>Anything about district-issued devices, which the statute exempts by definition</li>
+        <li>What your approved platforms do by default when a student opens them</li>
+        <li>Take-home access and what happens on the device after 3:00</li>
+        <li>Whether the optional educational-use exception is ever exercised, and by whom</li>
+        <li>What assignments ask students to produce, and whether that changed</li>
+        <li>How a student requests an exception without disclosing their circumstances to a class</li>
+        <li>Who owns instructional follow-through, and what comes off the calendar to fund it</li>
+        <li>Any measure of learning, as opposed to compliance</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Two provisions people miss</span>
+    <p><strong>The grandfather clause.</strong> Districts with a wireless device policy already in place before July 28, 2026 that limits use during a majority or the entirety of the school day may keep it through <strong>2030&ndash;31</strong> before conforming to Public Act 104-0657. Check whether you are on the 2027&ndash;28 clock or the 2030&ndash;31 one before you plan a timeline.</p>
+    <p><strong>The three-year review is your return date.</strong> The statute already requires periodic review with stakeholder input and enforcement data. You do not have to invent an accountability mechanism &mdash; you have to put something on it worth reviewing.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>The research, and what each finding licenses</h2><span class="eyebrow">Read the second half</span></div>
+  <p class="lede">Every entry below is real and worth citing. The <em>does not support</em> line is what keeps you from being quoted badly eighteen months from now.</p>
+
+  <div class="entries">
+
+    <div class="entry">
+      <div class="top"><span class="kind">Quasi-experimental</span><h3>Ill communication: Technology, distraction and student performance</h3></div>
+      <p class="cite">Beland, L.-P., &amp; Murphy, R. (2016). <em>Labour Economics, 41</em>, 61&ndash;76.</p>
+      <p class="what">Examination performance in English schools improved after phone bans, with gains concentrated among lower-achieving students.</p>
+      <div class="lic">
+        <span class="yes">that a restriction may particularly benefit students who are currently struggling.</span>
+        <span class="no">a general claim that banning phones raises test scores. Different country, earlier technology, and a policy environment predating generative tools.</span>
+      </div>
+      <p class="url">doi.org/10.1016/j.labeco.2016.04.004</p>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind">Cross-sectional</span><h3>School phone policies and their association with mental wellbeing, phone use, and social media use (SMART Schools)</h3></div>
+      <p class="cite">Goodyear, V. A., Randhawa, A., Adab, P., Al-Janabi, H., Fenton, S., Jones, K., Michail, M., Morrison, B., Patterson, P., Quinlan, J., Sitch, A., Twardochleb, R., Wade, M., &amp; Pallan, M. (2025). <em>The Lancet Regional Health &ndash; Europe, 51</em>, Article 101211.</p>
+      <p class="what">Across 30 English secondary schools and 1,227 adolescents, restrictive phone policies showed no association with better mental wellbeing and no association with lower overall phone use.</p>
+      <div class="lic">
+        <span class="yes">caution about promising wellbeing outcomes from a restriction.</span>
+        <span class="no">the claim that phone policies do not work. The design compared schools that already differed; absence of an association is not evidence that a policy change produces no effect.</span>
+      </div>
+      <p class="url">doi.org/10.1016/j.lanepe.2025.101211</p>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind">National evaluation</span><h3>Dutch national phone ban evaluation</h3></div>
+      <p class="cite">Netherlands Ministry of Education (2025).</p>
+      <p class="what">Roughly three quarters of schools reported improved concentration and about two thirds reported improved climate following restrictions.</p>
+      <div class="lic">
+        <span class="yes">that staff and students experience a restricted environment as calmer, which is a real and reportable effect.</span>
+        <span class="no">an academic outcome claim. These are perceptions, not measured attainment &mdash; and only about a third reported academic gain. Read alongside SMART Schools, this is a measurement gap rather than a contradiction.</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind">Survey</span><h3>72% of U.S. high school teachers say cellphone distraction is a major problem</h3></div>
+      <p class="cite">Hatfield, J. (2024, June 12). Pew Research Center.</p>
+      <p class="what">Nationally representative teacher survey on classroom cellphone distraction.</p>
+      <div class="lic">
+        <span class="yes">that the problem is real and widely experienced, which is sufficient grounds to act.</span>
+        <span class="no">any prediction about what a given remedy will produce.</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind">Methodological</span><h3>The great rewiring: Is social media really behind an epidemic of teenage mental illness?</h3></div>
+      <p class="cite">Odgers, C. L. (2024). <em>Nature, 628</em>, 29&ndash;30. See also Odgers &amp; Jensen (2020), <em>JCPP, 61</em>(3); Taylor et al. (2024), <em>Affective Science, 5</em>.</p>
+      <p class="what">A sustained methodological challenge to causal claims about adolescent technology effects, emphasizing within-person designs, the weakness of aggregate screen-time measures, and how offline vulnerability shapes online risk.</p>
+      <div class="lic">
+        <span class="yes">precision about causal language, and attention to variation across students rather than population averages.</span>
+        <span class="no">a claim that devices are harmless. Small average effects can coexist with concentrated harms. Odgers is a counterweight to Haidt, not a rebuttal of concern.</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind">Theory</span><h3>Examining productive failure, productive success, unproductive failure, and unproductive success in learning</h3></div>
+      <p class="cite">Kapur, M. (2016). <em>Educational Psychologist, 51</em>(2), 289&ndash;299.</p>
+      <p class="what">Distinguishes immediate performance from longer-term learning, and names the case where apparent success conceals a less productive learning process.</p>
+      <div class="lic">
+        <span class="yes">the core instructional concept of the session: a polished product is not sufficient evidence of learning.</span>
+        <span class="no">any claim about device policy. Kapur is about task design, and the extension to institutional decisions is an argument, not a finding.</span>
+      </div>
+      <p class="url">doi.org/10.1080/00461520.2016.1155457</p>
+    </div>
+
+    <div class="entry">
+      <div class="top"><span class="kind own">Framework</span><h3>When the output looks like learning: Pedagogical friction and human agency in the age of generative AI</h3></div>
+      <p class="cite">Miner, M. J. (2026). <em>i.e.: Inquiry in Education, 18</em>(1), Article 4.</p>
+      <p class="what">The four-dimension framework used throughout the session: noetic, rhetorical, existential, and infrastructural friction, and the distinction between productive and exclusionary difficulty.</p>
+      <div class="lic">
+        <span class="yes">a shared vocabulary for separating difficulty that builds capacity from difficulty that blocks participation.</span>
+        <span class="no">an empirical claim about outcomes. It is a theoretical framework; the associated dissertation research has collected no data.</span>
+      </div>
+      <p class="url">digitalcommons.nl.edu/ie/vol18/iss1/4/</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Going deeper</h2><span class="eyebrow">Companion sites</span></div>
+  <div class="entries">
+    <div class="entry">
+      <div class="top"><span class="kind own">Evidence hub</span><h3>K&ndash;12 Device Policy &amp; Pedagogical Friction Evidence Hub</h3></div>
+      <p class="what">The full evidence matrix behind this session, including the meta-analytic literature on 1-to-1 programs and technology integration, the print-versus-screen reading research, the LAUSD iPad case, UNESCO&rsquo;s GEM report, and Sweden&rsquo;s analogue reinvestment. Includes an interactive diagnostic and a documented search protocol, so a district can see how the corpus was assembled rather than taking the synthesis on faith.</p>
+      <p class="url"><a href="https://minerclass.github.io/k12-device-policy-evidence-hub/">minerclass.github.io/k12-device-policy-evidence-hub/</a></p>
+    </div>
+    <div class="entry">
+      <div class="top"><span class="kind own">Framework</span><h3>The Pedagogical Friction Framework</h3></div>
+      <p class="what">The four dimensions in full, with the productive-versus-exclusionary distinction developed at length.</p>
+      <p class="url"><a href="https://minerclass.github.io/pedagogical-friction/">minerclass.github.io/pedagogical-friction/</a></p>
+    </div>
+    <div class="entry">
+      <div class="top"><span class="kind own">Companion</span><h3>When the Output Looks Like Learning</h3></div>
+      <p class="what">The instructional-design half of this work, and the basis of the follow-on session for curriculum and instructional leaders.</p>
+      <p class="url"><a href="https://minerclass.github.io/When-Output-Looks-Like-Learning/">minerclass.github.io/When-Output-Looks-Like-Learning/</a></p>
+    </div>
+    <div class="entry">
+      <div class="top"><span class="kind">District practice</span><h3>Access models in the field</h3></div>
+      <p class="what">Battle Ground Public Schools, Irvine Unified, and LAUSD each publish their current device access model. Useful precisely because they differ &mdash; take-home, cart, and hybrid approaches are five distinct policy types rather than one national rollback, and reading three side by side makes that legible faster than any argument.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Before you cite any of it</h2><span class="eyebrow">Three questions</span></div>
+  <div class="split">
+    <div>
+      <h3>Keep these apart</h3>
+      <ul class="tick">
+        <li><strong>Is the restriction workable?</strong> Implementation. Staff experience, enforcement time, exception patterns.</li>
+        <li><strong>Can students participate?</strong> Access. Whether the supports students need survived the new conditions.</li>
+        <li><strong>What can students explain or do?</strong> Learning. Requires evidence from later work with different sources.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Where districts go wrong</h3>
+      <ul class="tick gap">
+        <li>Reporting falling confiscation counts as evidence of learning</li>
+        <li>Treating a policy announcement as an outcome</li>
+        <li>Reading a null association as proof that a change has no effect</li>
+        <li>Grading process documentation and calling it evidence of understanding</li>
+        <li>Claiming one redesigned assessment shows the policy caused a result</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Compiled for <em>The Friction Audit: What Your Phone Policy Cannot Do</em>, PD365, October 27, 2026. Statutory material from Illinois Public Act 104-0657 (SB 2427) and the ISBE <em>Model Cell Phone Policy</em> (August 2026). Verify current statutory language with district counsel before adopting policy &mdash; ISBE&rsquo;s toolkit is expressly informational and not legal advice.</p>
+  <p>Micah Miner, M.Ed., Ed.S., CETL &middot; admin@micahminer.com &middot; micahminer.com &middot; <a href="https://minerclass.github.io/">Research and workshop portfolio</a></p>
+</footer>
+
+</div>
+</body>
+</html>

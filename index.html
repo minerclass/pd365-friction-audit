@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>The Friction Audit</title>
+<meta name="description" content="Workshop materials for The Friction Audit: What Your Phone Policy Cannot Do — PD365, October 27, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#f4f6f8; --surface:#ffffff; --sunk:#e9edf1;
+  --ink:#14202b; --ink-soft:#3d4a57; --muted:#5c6873;
+  --rule:#d7dde4; --rule-strong:#b6c0ca;
+  --accent:#1d4e6f; --accent-soft:#e5edf3; --on-accent:#ffffff;
+  --signal:#8c6014; --signal-soft:#f6efe0;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+    --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+    --rule:#2a3742; --rule-strong:#3d4c59;
+    --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+    --signal:#d7a747; --signal-soft:#2a2214;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+  --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+  --rule:#2a3742; --rule-strong:#3d4c59;
+  --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+  --signal:#d7a747; --signal-soft:#2a2214;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.page{max-width:940px;margin:0 auto;padding:52px 24px 88px}
+@media(max-width:640px){.page{padding:30px 16px 60px}}
+h1,h2,h3{font-family:Newsreader,Georgia,"Times New Roman",serif;margin:0;font-weight:600;text-wrap:balance;line-height:1.12}
+h1{font-size:clamp(2.2rem,5.4vw,3.4rem);letter-spacing:-.018em}
+h2{font-size:1.4rem}
+h3{font-size:1.15rem}
+p{margin:0}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.masthead{display:flex;flex-direction:column;gap:14px;padding-bottom:26px;border-bottom:2px solid var(--ink)}
+.sub{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--ink-soft)}
+.meta{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted);letter-spacing:.05em;display:flex;flex-wrap:wrap;gap:8px 24px;padding-top:8px;border-top:1px solid var(--rule-strong);margin-top:8px}
+
+section{margin-top:46px}
+.sec-head{display:flex;align-items:baseline;gap:14px;padding-bottom:9px;border-bottom:1px solid var(--rule-strong);margin-bottom:20px;flex-wrap:wrap}
+.sec-head .eyebrow{margin-left:auto}
+.lede{font-size:1.02rem;color:var(--ink-soft);max-width:68ch;margin-bottom:24px}
+.lede em{color:var(--ink);font-style:italic}
+.lede strong{color:var(--ink)}
+
+.pull{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:clamp(1.2rem,2.6vw,1.75rem);line-height:1.35;color:var(--ink);max-width:34ch;border-left:3px solid var(--signal);padding-left:20px;margin:4px 0}
+.pull-cite{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);letter-spacing:.04em;padding-left:23px;margin-top:8px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:20px 22px;text-decoration:none;color:inherit;transition:border-color .14s,transform .14s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .kind{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.card h3{font-size:1.12rem}
+.card p{font-size:.92rem;color:var(--ink-soft)}
+.card .go{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--signal);font-weight:600;margin-top:auto;padding-top:4px}
+.card.wide{grid-column:1/-1}
+
+ul.plain{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.plain li{display:flex;gap:11px;align-items:baseline;font-size:.96rem;color:var(--ink-soft);max-width:72ch}
+ul.plain li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal);flex:none;transform:translateY(-3px)}
+ul.plain li strong{color:var(--ink)}
+
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:.85rem;color:var(--muted);max-width:70ch;display:flex;flex-direction:column;gap:9px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <p class="eyebrow">PD365 &middot; Three-Hour Online Workshop</p>
+  <h1>The Friction Audit</h1>
+  <p class="sub">What your phone policy cannot do</p>
+  <div class="meta">
+    <span>October 27, 2026</span><span>9:00 a.m. &ndash; 12:00 p.m. Central</span><span>Micah Miner, M.Ed., Ed.S., CETL</span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><h2>Why this session exists</h2><span class="eyebrow">Public Act 104-0657</span></div>
+  <p class="pull">&ldquo;Wireless communication device&rdquo; does not include a device issued by the school or a teacher for educational purposes.</p>
+  <p class="pull-cite">SB 2427 &middot; signed July 28, 2026 &middot; effective 2027&ndash;28</p>
+  <p class="lede" style="margin-top:22px">The statute regulates one channel of the screen ecology and exempts the rest by definition. Every Illinois district will be compliant by adopting the ISBE template. <strong>None will know, on that basis alone, whether anything about learning changed.</strong></p>
+  <p class="lede">ISBE said as much in its own model policy: teachers estimate <em>one in three students</em> are using laptops at school for nonacademic purposes. The state named the second problem in the same document that directs districts to solve the first.</p>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Materials</h2><span class="eyebrow">Open in any browser</span></div>
+  <div class="cards">
+    <a class="card wide" href="deck/">
+      <span class="kind">Session deck</span>
+      <h3>The full three-hour workshop</h3>
+      <p>Thirty-three slides across seven segments, with four activities and a working audit instrument. Arrow keys or space to advance, <strong>M</strong> for the agenda menu. Everything you type saves in your own browser; the last slide exports it as one file.</p>
+      <span class="go">Open the deck &rarr;</span>
+    </a>
+    <a class="card" href="crosswalk/">
+      <span class="kind">Takeaway</span>
+      <h3>Policy-to-Practice Crosswalk</h3>
+      <p>Eight questions traced across personal phones, district-issued devices, and generative AI. Built to be read in a cabinet meeting, with a 40-minute protocol for running it.</p>
+      <span class="go">Open the crosswalk &rarr;</span>
+    </a>
+    <a class="card" href="resources/">
+      <span class="kind">Takeaway</span>
+      <h3>Illinois Resource Set</h3>
+      <p>Every source annotated with what it supports and what it does not, plus a split of what the ISBE template decides for you against what it leaves open.</p>
+      <span class="go">Open the resource set &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Bring one thing</h2><span class="eyebrow">Before October 27</span></div>
+  <ul class="plain">
+    <li><strong>Your draft wireless communication device policy</strong> &mdash; or the ISBE <em>Model Cell Phone Policy</em> released in August 2026. Either works, and the session is built so that arriving with the template alone costs you nothing.</li>
+    <li><strong>The name of your approved AI or writing platform.</strong> One segment asks what it does by default when a student opens it. Most districts have never checked.</li>
+    <li><strong>Check which clock you are on.</strong> Districts with a qualifying policy in place before July 28, 2026 may hold it through 2030&ndash;31 rather than conforming by 2027&ndash;28.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Where the argument comes from</h2><span class="eyebrow">Companion work</span></div>
+  <div class="cards">
+    <a class="card" href="https://minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/">
+      <span class="kind">Essay</span>
+      <h3>The Pouch and the Bypass</h3>
+      <p>The full argument and the district audit protocol in its original form. The right thing to hand a board member who asks why you are auditing a policy the state already wrote.</p>
+      <span class="go">Read it &rarr;</span>
+    </a>
+    <a class="card" href="https://minerclass.github.io/k12-device-policy-evidence-hub/">
+      <span class="kind">Evidence</span>
+      <h3>K&ndash;12 Device Policy Evidence Hub</h3>
+      <p>The evidence matrix behind the session, with a documented search protocol so districts can see how the corpus was assembled.</p>
+      <span class="go">Open the hub &rarr;</span>
+    </a>
+    <a class="card" href="https://minerclass.github.io/pedagogical-friction/">
+      <span class="kind">Framework</span>
+      <h3>Pedagogical Friction</h3>
+      <p>The four dimensions in full &mdash; noetic, rhetorical, existential, infrastructural &mdash; and the productive versus exclusionary distinction.</p>
+      <span class="go">Open the framework &rarr;</span>
+    </a>
+    <a class="card" href="https://minerclass.github.io/When-Output-Looks-Like-Learning/">
+      <span class="kind">Companion</span>
+      <h3>When the Output Looks Like Learning</h3>
+      <p>The instructional-design half of this work, and the basis of the follow-on session for curriculum leaders.</p>
+      <span class="go">Open the companion &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Statutory material from Illinois Public Act 104-0657 (SB 2427) and the ISBE <em>Model Cell Phone Policy</em> (August 2026). ISBE&rsquo;s toolkit is expressly informational and not legal advice &mdash; verify current statutory language with district counsel before adopting policy.</p>
+  <p>Micah Miner, M.Ed., Ed.S., CETL &middot; <a href="mailto:admin@micahminer.com">admin@micahminer.com</a> &middot; <a href="https://micahminer.com">micahminer.com</a> &middot; <a href="https://minerclass.github.io/">Research and workshop portfolio</a></p>
+</footer>
+
+</div>
+</body>
+</html>
