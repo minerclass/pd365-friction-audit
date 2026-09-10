@@ -26,7 +26,7 @@ The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Poli
 | Asset | Location | Status |
 | :--- | :--- | :--- |
 | Session hub | `/index.html` | Complete |
-| Deck (participant copy) | `/deck/index.html` | Complete — 34 slides, 7 segments, 4 activities |
+| Deck (participant copy) | `/deck/index.html` | Complete — 36 slides, 7 published segments plus an appendix, 4 activities |
 | Policy-to-Practice Crosswalk | `/crosswalk/index.html` | Complete |
 | Illinois Resource Set | `/resources/index.html` | Complete |
 
@@ -34,17 +34,32 @@ Live at **https://minerclass.github.io/pd365-friction-audit/**. Static pages, no
 
 ### The agenda is fixed, not yours to restructure
 
-These seven segments and their timings come from the workshop brief PD365 already holds and will promote from. Content within a segment is editable; the structure is not.
+These segments and their timings come from **PD365's published event listing**, which is what registrants see and pay against. Content within a segment is editable; the structure is not. If the listing and this table ever disagree, the listing wins — check it before restructuring anything.
 
 | Offset | Clock | Segment |
 | :--- | :--- | :--- |
 | 0:00–0:20 | 9:00 | Policy context |
 | 0:20–0:50 | 9:20 | Friction framework |
-| 0:50–1:20 | 9:50 | Cases and evidence |
-| 1:20–1:30 | 10:20 | Break |
-| 1:30–2:20 | 10:30 | District audit studio |
-| 2:20–2:45 | 11:20 | System alignment |
-| 2:45–3:00 | 11:45 | Commitments |
+| 0:50–1:00 | 9:50 | Break |
+| 1:00–1:50 | 10:00 | District audit studio |
+| 1:50–2:15 | 10:50 | System alignment |
+| 2:15–2:30 | 11:15 | Commitments |
+| 2:30–3:00 | 11:30 | Questions |
+
+**This changed on 2026-09-10.** The brief originally carried a seven-segment agenda with a
+30-minute "Cases and evidence" block and no Q&A. PD365's published listing dropped that
+segment and added "Remaining time — Question and Answers" at the end, and Micah chose to
+keep their rollout rather than ask for a correction. The deck was restructured to match:
+the claims-ladder activity moved into Friction framework, the five implementation
+questions moved into the audit studio setup, and the two evidence slides became an
+**Appendix** reachable from the agenda menu (`M`) during the question block. Nothing was
+deleted.
+
+**Two consequences worth knowing.** Friction framework now carries two activities in 30
+minutes and is the tightest segment in the session. And the only scheduled break is at
+9:50, leaving an unbroken run from 10:00 to noon — the studio divider's notes tell the
+facilitator to call a discretionary five-minute stretch break around 10:50, which costs
+nothing from the published structure.
 
 ### The five participant takeaways are contractual
 
@@ -76,7 +91,7 @@ After any deck change the full sequence is: edit `src/deck.source.html`, run the
 
 ### 3.2 The deck workflow — edit the source, never the build
 
-`src/deck.source.html` is the **canonical deck**. It carries facilitator notes on all 34 slides. `deck/index.html` is generated from it and is what GitHub Pages serves.
+`src/deck.source.html` is the **canonical deck**. It carries facilitator notes on all 36 slides. `deck/index.html` is generated from it and is what GitHub Pages serves.
 
 ```bash
 # edit src/deck.source.html, then:
@@ -212,7 +227,7 @@ An agent should not email Ryan, draft messages to him, or make commitments on Mi
 
 **This repo**
 - `/index.html` — hub, pre-work, links out
-- `/src/deck.source.html` — **canonical deck**, with facilitator notes on all 34 slides
+- `/src/deck.source.html` — **canonical deck**, with facilitator notes on all 36 slides
 - `/deck/index.html` — generated participant deck; never hand-edit, see §3.2
 - `/crosswalk/index.html` — the leave-behind matrix
 - `/resources/index.html` — annotated sources
