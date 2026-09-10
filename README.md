@@ -27,7 +27,7 @@ ISBE's own *Model Cell Phone Policy* reports the second half of the problem: fro
 | Path | What it is |
 | :--- | :--- |
 | [`/`](https://minerclass.github.io/pd365-friction-audit/) | Session hub and pre-work |
-| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck — 33 slides, 7 segments, 4 activities, working audit instrument |
+| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck — 34 slides, 7 segments, 4 activities, working audit instrument |
 | [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk — 8 questions × 3 device contexts |
 | [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set — annotated sources with what each does and does not support |
 
