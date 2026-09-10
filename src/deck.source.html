@@ -1,0 +1,1122 @@
+<title>The Friction Audit Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#f4f6f8; --surface:#ffffff; --sunk:#e9edf1;
+  --ink:#14202b; --ink-soft:#3d4a57; --muted:#5c6873;
+  --rule:#d7dde4; --rule-strong:#b6c0ca;
+  --accent:#1d4e6f; --accent-soft:#e5edf3; --on-accent:#ffffff;
+  --signal:#8c6014; --signal-soft:#f6efe0;
+  --good:#1f6b4d; --good-soft:#e3f0ea;
+  --bad:#9a3324; --bad-soft:#f7e8e5;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+    --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+    --rule:#2a3742; --rule-strong:#3d4c59;
+    --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+    --signal:#d7a747; --signal-soft:#2a2214;
+    --good:#6dc39b; --good-soft:#14261f;
+    --bad:#e08979; --bad-soft:#2a1a17;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+  --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+  --rule:#2a3742; --rule-strong:#3d4c59;
+  --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+  --signal:#d7a747; --signal-soft:#2a2214;
+  --good:#6dc39b; --good-soft:#14261f;
+  --bad:#e08979; --bad-soft:#2a1a17;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+h1,h2,h3{font-family:Newsreader,Georgia,"Times New Roman",serif;text-wrap:balance;margin:0;font-weight:600;line-height:1.12}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* ---------- deck shell ---------- */
+.deck{position:fixed;inset:0 0 54px 0;overflow:hidden}
+.slide{
+  position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  gap:22px;padding:clamp(28px,4.5vw,72px) clamp(24px,6vw,96px);overflow-y:auto;
+}
+.slide.on{display:flex}
+.slide.notes-open{padding-right:clamp(24px,6vw,96px)}
+.wrap{width:100%;max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:inherit}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:clamp(.66rem,.95vw,.8rem);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.slide h2{font-size:clamp(1.7rem,3.5vw,2.9rem)}
+.slide h3{font-size:clamp(1.05rem,1.7vw,1.4rem)}
+.slide p,.slide li{font-size:clamp(.98rem,1.45vw,1.28rem);color:var(--ink-soft);max-width:70ch}
+.slide p.tight{max-width:62ch}
+.slide strong{color:var(--ink);font-weight:600}
+.slide em{color:var(--ink);font-style:italic}
+
+/* title */
+.title-slide{justify-content:center}
+.title-slide h1{font-size:clamp(2.3rem,6vw,4.6rem);letter-spacing:-.02em;line-height:1.02}
+.title-slide .sub{font-size:clamp(1.05rem,2vw,1.6rem);color:var(--ink-soft);max-width:34ch;font-family:Newsreader,Georgia,serif;font-style:italic}
+.title-meta{display:flex;flex-wrap:wrap;gap:10px 26px;font-family:"IBM Plex Mono",monospace;font-size:clamp(.72rem,1.1vw,.92rem);color:var(--muted);letter-spacing:.04em;padding-top:8px;border-top:1px solid var(--rule-strong);margin-top:6px}
+
+/* segment divider */
+.divider{background:var(--accent);color:var(--on-accent)}
+.divider h2{color:var(--on-accent);font-size:clamp(2rem,5vw,3.8rem)}
+.divider .eyebrow{color:var(--on-accent);opacity:.75}
+.divider p{color:var(--on-accent);opacity:.9;max-width:56ch;font-size:clamp(1rem,1.6vw,1.35rem)}
+.divider .seg-clock{font-family:"IBM Plex Mono",monospace;font-size:clamp(.8rem,1.2vw,1rem);color:var(--on-accent);opacity:.72;letter-spacing:.08em}
+
+/* statute pull */
+.pull{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:clamp(1.5rem,3.6vw,3rem);line-height:1.28;color:var(--ink);max-width:20ch;border-left:4px solid var(--signal);padding-left:clamp(16px,2.5vw,32px)}
+.pull-cite{font-family:"IBM Plex Mono",monospace;font-size:clamp(.7rem,1vw,.85rem);color:var(--muted);letter-spacing:.04em;padding-left:clamp(20px,2.5vw,36px)}
+
+/* generic blocks */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cols.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.box{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:clamp(14px,1.6vw,20px);display:flex;flex-direction:column;gap:8px}
+.box h3{font-size:clamp(1rem,1.4vw,1.2rem)}
+.box p{font-size:clamp(.88rem,1.15vw,1.05rem)}
+.box.flag{border-color:var(--signal);background:var(--signal-soft)}
+.box.flag .tag{color:var(--signal)}
+.box .tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+
+ul.plain{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.plain li{display:flex;gap:11px;align-items:baseline}
+ul.plain li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal);flex:none;transform:translateY(-3px)}
+
+ol.numbered{margin:0;padding:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:12px}
+ol.numbered li{counter-increment:n;display:flex;gap:14px;align-items:baseline}
+ol.numbered li::before{content:counter(n);font-family:"IBM Plex Mono",monospace;font-size:.78rem;font-weight:600;color:var(--on-accent);background:var(--accent);border-radius:2px;padding:2px 8px;flex:none}
+
+.two-up{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+@media(max-width:800px){.two-up{grid-template-columns:1fr}}
+.two-up > div{padding:clamp(14px,1.8vw,22px);background:var(--surface);display:flex;flex-direction:column;gap:9px}
+.two-up > div:first-child{border-right:1px solid var(--rule);background:var(--sunk)}
+@media(max-width:800px){.two-up > div:first-child{border-right:none;border-bottom:1px solid var(--rule)}}
+
+/* channel strip */
+.channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.ch{border:1px solid var(--rule);background:var(--surface);border-radius:3px;padding:13px 15px;display:flex;flex-direction:column;gap:7px}
+.ch .st{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.ch .nm{font-size:clamp(.85rem,1.1vw,1rem);font-weight:600;line-height:1.3;color:var(--ink)}
+.ch.reg .st{color:var(--accent)}
+.ch.gap{border-color:var(--signal);background:var(--signal-soft)}
+.ch.gap .st{color:var(--signal)}
+
+/* dimension cards */
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.dim{border:1px solid var(--rule);border-top:3px solid var(--accent);background:var(--surface);border-radius:2px;padding:15px 17px;display:flex;flex-direction:column;gap:8px}
+.dim .gr{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dim h3{font-size:clamp(1rem,1.35vw,1.18rem)}
+.dim p{font-size:clamp(.83rem,1.08vw,.98rem)}
+.dim.infra{border-top-color:var(--signal)}
+
+/* activities */
+.activity{background:var(--surface);border:1px solid var(--rule-strong);border-radius:4px;overflow:hidden}
+.act-head{display:flex;align-items:baseline;gap:12px;padding:11px 18px;background:var(--sunk);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.act-head .lbl{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--signal)}
+.act-head .mins{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--muted);margin-left:auto}
+.act-body{padding:clamp(14px,1.8vw,22px);display:flex;flex-direction:column;gap:14px}
+
+.qrow{display:flex;flex-direction:column;gap:9px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.qrow:last-child{border-bottom:none;padding-bottom:0}
+.qtext{font-size:clamp(.92rem,1.25vw,1.12rem);color:var(--ink);max-width:76ch}
+.qtext .q{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);margin-right:9px;font-weight:600}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1px solid var(--rule-strong);background:var(--paper);border-radius:2px;padding:6px 13px;font-size:clamp(.8rem,1.05vw,.94rem);transition:background .12s,border-color .12s,color .12s}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.reveal{display:none;font-size:clamp(.85rem,1.1vw,1rem);padding:10px 13px;border-radius:2px;max-width:76ch;line-height:1.5}
+.reveal.show{display:block}
+.reveal.ok{background:var(--good-soft);border-left:3px solid var(--good);color:var(--ink)}
+.reveal.no{background:var(--bad-soft);border-left:3px solid var(--bad);color:var(--ink)}
+.reveal.mid{background:var(--signal-soft);border-left:3px solid var(--signal);color:var(--ink)}
+.reveal b{font-weight:700}
+
+/* workbook fields */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.field input,.field textarea{
+  font:inherit;font-size:clamp(.88rem,1.1vw,1rem);color:var(--ink);background:var(--paper);
+  border:1px solid var(--rule-strong);border-radius:2px;padding:8px 11px;width:100%;resize:vertical;
+}
+.field textarea{min-height:62px;line-height:1.5}
+.field input:focus,.field textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 2px var(--accent-soft)}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:820px){.grid3,.grid2{grid-template-columns:1fr}}
+
+.chan-block{border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--surface)}
+.chan-block > .cb-head{display:flex;align-items:baseline;gap:10px;padding:10px 15px;background:var(--sunk);border-bottom:1px solid var(--rule)}
+.cb-head .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:600;color:var(--on-accent);background:var(--accent);padding:1px 7px;border-radius:2px}
+.cb-head h3{font-size:clamp(.95rem,1.25vw,1.1rem)}
+.cb-body{padding:14px 15px;display:flex;flex-direction:column;gap:11px}
+
+/* register */
+.reg-row{display:grid;grid-template-columns:1.6fr 1.2fr 1fr .8fr auto;gap:9px;align-items:end}
+@media(max-width:900px){.reg-row{grid-template-columns:1fr 1fr}}
+.rm{border:1px solid var(--rule-strong);border-radius:2px;padding:7px 11px;font-size:.8rem;color:var(--muted);background:var(--paper);height:fit-content}
+.rm:hover{border-color:var(--bad);color:var(--bad)}
+.addbtn{align-self:flex-start;border:1px dashed var(--rule-strong);border-radius:2px;padding:9px 16px;font-size:.88rem;color:var(--accent);font-weight:600;background:var(--paper)}
+.addbtn:hover{border-color:var(--accent);background:var(--accent-soft)}
+
+/* break */
+.break-slide{align-items:center;text-align:center;justify-content:center}
+.break-slide .clockface{font-family:"IBM Plex Mono",monospace;font-size:clamp(4rem,16vw,11rem);font-weight:600;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.break-slide .ctl{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.bbtn{border:1px solid var(--rule-strong);background:var(--surface);border-radius:2px;padding:9px 20px;font-size:.92rem;font-weight:600}
+.bbtn:hover{border-color:var(--accent);color:var(--accent)}
+.break-slide p{max-width:48ch;margin:0 auto}
+
+/* export */
+.export-btn{background:var(--accent);color:var(--on-accent);border-radius:3px;padding:14px 28px;font-size:clamp(.95rem,1.3vw,1.12rem);font-weight:600;align-self:flex-start}
+.export-btn:hover{opacity:.9}
+.export-btn[disabled]{opacity:.5;cursor:default}
+.export-note{font-size:.88rem;color:var(--muted);max-width:60ch}
+
+/* ---------- chrome ---------- */
+.chrome{
+  position:fixed;left:0;right:0;bottom:0;height:54px;background:var(--surface);
+  border-top:1px solid var(--rule);display:flex;align-items:center;gap:14px;
+  padding:0 16px;z-index:40;
+}
+.progress{position:absolute;top:-1px;left:0;height:2px;background:var(--signal);transition:width .2s}
+.cbtn{border:1px solid var(--rule-strong);border-radius:2px;width:32px;height:32px;display:grid;place-items:center;font-size:1rem;color:var(--ink-soft);background:var(--paper);flex:none}
+.cbtn:hover{border-color:var(--accent);color:var(--accent)}
+.cbtn.wide{width:auto;padding:0 12px;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600}
+.seg-now{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.timer{font-family:"IBM Plex Mono",monospace;font-size:.8rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.timer .delta{font-weight:500;margin-left:7px}
+.timer .delta.ahead{color:var(--good)}
+.timer .delta.behind{color:var(--bad)}
+.count{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:720px){.seg-now{display:none}}
+
+/* notes */
+.notes{
+  position:fixed;right:0;top:0;bottom:54px;width:min(380px,86vw);background:var(--sunk);
+  border-left:1px solid var(--rule-strong);padding:24px 22px;overflow-y:auto;z-index:35;
+  display:flex;flex-direction:column;gap:12px;
+}
+.notes h4{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
+.notes .ntext{font-size:.93rem;color:var(--ink-soft);line-height:1.6}
+.notes .ntext b{color:var(--ink)}
+.notes .ntext p+p{margin-top:9px}
+
+/* menu */
+.menu{position:fixed;inset:0;background:var(--paper);z-index:60;overflow-y:auto;padding:clamp(24px,4vw,56px)}
+.menu-in{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.menu h2{font-size:clamp(1.5rem,3vw,2.2rem)}
+.mgroup{display:flex;flex-direction:column;gap:2px}
+.mgroup .gh{display:flex;align-items:baseline;gap:12px;padding:9px 0 7px;border-bottom:1px solid var(--rule-strong);margin-bottom:6px}
+.mgroup .gh .gn{font-family:Newsreader,Georgia,serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+.mgroup .gh .gt{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);margin-left:auto}
+.mitem{display:flex;align-items:baseline;gap:12px;padding:6px 9px;border-radius:2px;text-align:left;width:100%;font-size:.93rem;color:var(--ink-soft)}
+.mitem:hover{background:var(--accent-soft);color:var(--ink)}
+.mitem .mn{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted);width:26px;flex:none;font-variant-numeric:tabular-nums}
+.mitem.act{background:var(--accent);color:var(--on-accent);font-weight:600}
+.mitem.act .mn{color:var(--on-accent);opacity:.75}
+.hint{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted);letter-spacing:.05em;line-height:1.9}
+.hint kbd{background:var(--surface);border:1px solid var(--rule-strong);border-radius:2px;padding:1px 6px;font-family:inherit;font-size:.72rem}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="deck" id="deck">
+
+<!-- ============ 1 · OPEN ============ -->
+<section class="slide title-slide on" data-seg="Open" data-mark="0" data-notes="<p><b>Before you start.</b> Confirm PD365 has given you co-host so you can run breakouts. Have the ISBE template open in a second tab for anyone who arrives empty-handed.</p><p>Say plainly in the first minute: this session is policy-neutral beyond what the law requires. Some people in the room have already voted bell-to-bell and some are still arguing about it. Both get the same value here.</p>">
+  <div class="wrap">
+    <p class="eyebrow">PD365 &middot; Three-Hour Online Workshop</p>
+    <h1>The Friction Audit</h1>
+    <p class="sub">What your phone policy cannot do</p>
+    <div class="title-meta">
+      <span>October 27, 2026</span><span>9:00 a.m. &ndash; 12:00 p.m. Central</span><span>Micah Miner, M.Ed., Ed.S., CETL</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Open" data-mark="2" data-notes="<p>Thirty seconds on each. Do not linger &mdash; the poll on the next few slides is where they wake up.</p><p><b>If participants have this link,</b> tell them now: the activities and the audit fields are theirs to fill in, and everything saves in their own browser. Nothing they type is sent anywhere.</p>">
+  <div class="wrap">
+    <p class="eyebrow">How this morning works</p>
+    <h2>You will leave with the audit finished, not with notes about an audit</h2>
+    <div class="cols">
+      <div class="box"><span class="tag">Bring</span><p>Your draft policy, or the ISBE template released September 1. Either works.</p></div>
+      <div class="box"><span class="tag">Build</span><p>A coverage map, an access risk register, and a board-ready rationale &mdash; in this page, saved in your browser.</p></div>
+      <div class="box"><span class="tag">Leave with</span><p>A file you can export at the end and take into a cabinet meeting.</p></div>
+    </div>
+    <p class="tight">The session is policy-neutral beyond what the law requires. It is built to be as useful to a district adopting bell-to-bell as to one revising what it already has.</p>
+  </div>
+</section>
+
+<!-- ============ 2 · POLICY CONTEXT ============ -->
+<section class="slide divider" data-seg="Policy context" data-mark="4" data-notes="<p>Twenty minutes. The whole job of this segment is to get them to see the exemption clause before they see your argument.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment One</p>
+    <h2>Policy context</h2>
+    <p>The legal floor, the district choices it leaves open, and the limits of compliance on its own.</p>
+    <p class="seg-clock">9:00 &ndash; 9:20 &middot; 20 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="5" data-notes="<p><b>Read it aloud. Then stop talking.</b> Let it sit for a beat before you say anything.</p><p>This is the single most important slide of the morning. Everything after it is elaboration.</p><p>If someone jumps in with &lsquo;wait, so Chromebooks are exempt?&rsquo; &mdash; that is the session working. Do not rush past it.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Public Act 104-0657 &middot; the definition</p>
+    <p class="pull">&ldquo;Wireless communication device&rdquo; does not include a device issued by the school or a teacher for educational purposes.</p>
+    <p class="pull-cite">SB 2427 &middot; signed July 28, 2026 &middot; effective 2027&ndash;28 school year</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="7" data-notes="<p>Keep this factual and fast. They know most of it. You are establishing that you know the statute cold so the argument later lands.</p><p><b>ISBE template released September 1</b> &mdash; ask by show of hands who has read it. That number is usually lower than you would expect.</p>">
+  <div class="wrap">
+    <p class="eyebrow">What the law requires</p>
+    <h2>Bell to bell, with a high school exception</h2>
+    <div class="two-up">
+      <div>
+        <h3>Kindergarten through grade 8</h3>
+        <p>Restricted from the first arrival bell to the final dismissal bell &mdash; including lunch, passing periods, and other non-instructional time.</p>
+      </div>
+      <div>
+        <h3>High school</h3>
+        <p>Bell-to-bell as the default, with a district opt-out permitting access during passing periods and lunch. Use during class remains prohibited either way.</p>
+      </div>
+    </div>
+    <ul class="plain">
+      <li>Effective for the <strong>2027&ndash;28 school year</strong>. ISBE released its template policy September 1, 2026.</li>
+      <li>Districts have roughly eighteen months to adopt, communicate, and prepare.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="10" data-notes="<p>Read the regulated list, then land hard on the exempt column. Pause there.</p><p>The line that usually gets a reaction: <b>&lsquo;The statute regulates the device in the student&rsquo;s pocket. It says nothing about the one you handed them.&rsquo;</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">What the statute covers</p>
+    <h2>A broad list, and one large exemption</h2>
+    <div class="two-up">
+      <div>
+        <h3>Regulated</h3>
+        <p>Cellphones. Smartwatches and smart glasses. Gaming devices. Personal laptops and tablets. Wearables generally.</p>
+      </div>
+      <div>
+        <h3>Exempt by definition</h3>
+        <p>Any device the school or a teacher issues for educational purposes. Your entire one-to-one fleet sits outside the statute.</p>
+      </div>
+    </div>
+    <p class="tight">This is not a loophole and not an oversight. It is the correct scope for a distraction statute. It does mean the law settles one channel and leaves four others entirely to you.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="12" data-notes="<p>Important framing: these exceptions are the statute conceding, in its own text, that a blanket rule creates access barriers. You will return to this in Segment Two.</p><p>Ask: <b>who in your district is going to own the case-by-case caregiver determination?</b> Nobody ever has an answer. That is the point.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Mandated exceptions</p>
+    <h2>The law already concedes that a blanket rule blocks somebody</h2>
+    <ul class="plain">
+      <li><strong>Medical need</strong> &mdash; devices required to monitor or manage a health condition.</li>
+      <li><strong>IEPs and 504 plans</strong> &mdash; where a device is part of the student&rsquo;s special education services.</li>
+      <li><strong>English learners</strong> &mdash; where a device provides language translation.</li>
+      <li><strong>Emergencies</strong>, and <strong>case-by-case determinations</strong> for students who are caregivers for family at home.</li>
+    </ul>
+    <div class="box flag"><span class="tag">The question underneath</span><p>Every one of these is an access decision made in advance. The audit asks which access decisions you have <em>not</em> yet made in advance.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="14" data-notes="<p><b>Run this as a live poll.</b> Give them 90 seconds to click through all five. Then read the room.</p><p>The interesting result is never column one. It is how many people click &lsquo;not sure&rsquo; on platform defaults and take-home access. Name that out loud when it happens.</p><p>If nobody has the link open, run it verbally: five channels, hands up for each.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment One activity</p>
+    <h2>What does your draft actually cover?</h2>
+    <div class="activity">
+      <div class="act-head"><span class="lbl">Poll</span><span>Click one answer per channel. Your answers stay in your browser.</span><span class="mins">4 min</span></div>
+      <div class="act-body" id="poll1">
+        <div class="qrow" data-k="p1a"><p class="qtext"><span class="q">01</span>Personal phones and wearables</p><div class="opts" data-opts="Addressed|Partly|Not sure"></div></div>
+        <div class="qrow" data-k="p1b"><p class="qtext"><span class="q">02</span>District-issued devices during the school day</p><div class="opts" data-opts="Addressed|Partly|Not sure"></div></div>
+        <div class="qrow" data-k="p1c"><p class="qtext"><span class="q">03</span>What your approved platforms do by default</p><div class="opts" data-opts="Addressed|Partly|Not sure"></div></div>
+        <div class="qrow" data-k="p1d"><p class="qtext"><span class="q">04</span>Take-home device access</p><div class="opts" data-opts="Addressed|Partly|Not sure"></div></div>
+        <div class="qrow" data-k="p1e"><p class="qtext"><span class="q">05</span>What assignments ask students to produce</p><div class="opts" data-opts="Addressed|Partly|Not sure"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Policy context" data-mark="18" data-notes="<p>This is the thesis slide. Say the last line slowly.</p><p><b>&lsquo;Every district in this room will be compliant. None of you will know, on that basis alone, whether anything about learning changed.&rsquo;</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">The screen ecology</p>
+    <h2>One channel regulated, four left open</h2>
+    <div class="channels">
+      <div class="ch reg"><span class="st">Regulated</span><span class="nm">Personal phones and wearables</span></div>
+      <div class="ch reg"><span class="st">Regulated</span><span class="nm">Personal laptops and gaming devices</span></div>
+      <div class="ch gap"><span class="st">Exempt</span><span class="nm">District-issued 1-to-1 devices</span></div>
+      <div class="ch gap"><span class="st">Untouched</span><span class="nm">Platform defaults and AI features</span></div>
+      <div class="ch gap"><span class="st">Untouched</span><span class="nm">Take-home access</span></div>
+      <div class="ch gap"><span class="st">Untouched</span><span class="nm">What the assignment asks for</span></div>
+    </div>
+    <p class="tight">Compliance is guaranteed the day you adopt the template. Whether anything about learning changed is a separate question, and nothing in the adoption answers it.</p>
+  </div>
+</section>
+
+<!-- ============ 3 · FRICTION FRAMEWORK ============ -->
+<section class="slide divider" data-seg="Friction framework" data-mark="20" data-notes="<p>Thirty minutes. Resist the urge to lecture the framework. Four short slides, then get them sorting.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Two</p>
+    <h2>The friction framework</h2>
+    <p>Four dimensions, and one distinction that does most of the work: difficulty that builds capacity against difficulty that blocks participation.</p>
+    <p class="seg-clock">9:20 &ndash; 9:50 &middot; 30 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Friction framework" data-mark="21" data-notes="<p>The whole framework reduces to this slide. If they take one thing home, it is this distinction.</p><p>Concrete pair that always lands: <b>drafting a claim by hand before opening a tool</b> versus <b>requiring written-only submission from a student who is still learning English.</b> Both are friction. Only one teaches.</p>">
+  <div class="wrap">
+    <p class="eyebrow">The distinction</p>
+    <h2>Not all difficulty is the same kind of difficulty</h2>
+    <div class="two-up">
+      <div>
+        <h3>Productive friction</h3>
+        <p>Difficulty that builds capacity: the generative cognitive work, real dialogue, authorship, and accountability through which understanding forms.</p>
+        <p><em>Drafting a claim by hand before opening a tool.</em></p>
+      </div>
+      <div>
+        <h3>Exclusionary friction</h3>
+        <p>Difficulty that blocks access or participation without contributing to learning &mdash; often by treating one cognitive profile as the unmarked norm.</p>
+        <p><em>Requiring written-only formats that shut out multilingual learners.</em></p>
+      </div>
+    </div>
+    <p class="tight">A policy decision can produce either one. Usually it produces some of both, and nobody has named which is which.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Friction framework" data-mark="24" data-notes="<p>Ninety seconds per card, no more. You are giving them vocabulary, not a theory seminar.</p><p><b>Land the fourth one hardest.</b> Infrastructural friction is the leadership dimension &mdash; it is the only one the people in this room control directly, and it is the one that decides whether the other three survive.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Four dimensions</p>
+    <h2>Where the work has to happen</h2>
+    <div class="dims">
+      <div class="dim"><span class="gr">The head</span><h3>Noetic</h3><p>The synthesis, argument, and meaning-making that must happen inside the learner. Lost when cognitive labor moves from the student to a generating system.</p></div>
+      <div class="dim"><span class="gr">The room</span><h3>Rhetorical</h3><p>Authentic dialogue and genuine exchange. Simulated dialogue rarely resists, disagrees, or holds anyone to account.</p></div>
+      <div class="dim"><span class="gr">The world</span><h3>Existential</h3><p>Claims tied to claimants. Text can now be produced with no consciousness standing behind it; authorship and intellectual risk are what resist that.</p></div>
+      <div class="dim infra"><span class="gr">The system</span><h3>Infrastructural</h3><p>Policy, assessment, leadership, professional learning, and governance &mdash; the conditions that let the other three be sustained. This is your dimension.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Friction framework" data-mark="27" data-notes="<p><b>Twelve minutes.</b> Let them work in silence for the first six, then take answers out loud.</p><p>Scenario 5 is the one to spend time on &mdash; it is neither productive nor exclusionary. It is friction that was <i>removed</i> by a vendor decision nobody in the district made deliberately. That is the bridge to the audit studio.</p><p>Scenario 6 splits rooms. Let the disagreement run; do not resolve it too fast.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Two activity</p>
+    <h2>Sort the friction</h2>
+    <div class="activity">
+      <div class="act-head"><span class="lbl">Card sort</span><span>Classify each one, then check the reading.</span><span class="mins">12 min</span></div>
+      <div class="act-body" id="sort1">
+        <div class="qrow" data-k="s1" data-answer="prod">
+          <p class="qtext"><span class="q">01</span>Students draft a claim by hand before opening any AI tool.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal ok"><b>Productive, noetic.</b> The work of forming a position happens in the learner. The difficulty is the point, and it is doing something.</div>
+        </div>
+        <div class="qrow" data-k="s2" data-answer="excl">
+          <p class="qtext"><span class="q">02</span>All work must be typed and submitted in writing. No oral or recorded options.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal no"><b>Exclusionary.</b> It treats one output mode as the unmarked norm and blocks multilingual learners and students with writing-related disabilities without adding any learning the task required.</div>
+        </div>
+        <div class="qrow" data-k="s3" data-answer="excl">
+          <p class="qtext"><span class="q">03</span>Phones are collected at the door. A student who helps manage a parent&rsquo;s medical care cannot check messages.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal no"><b>Exclusionary as written</b> &mdash; and the statute already anticipates it through case-by-case caregiver determinations. The failure is not the rule. It is designing the exception after the rule instead of alongside it.</div>
+        </div>
+        <div class="qrow" data-k="s4" data-answer="prod">
+          <p class="qtext"><span class="q">04</span>Students explain, in two sentences, one revision they made and why the evidence warranted it.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal ok"><b>Productive, existential and rhetorical.</b> It ties a claim to a claimant. It also costs almost nothing to implement, which matters when you are asking teachers to absorb a change.</div>
+        </div>
+        <div class="qrow" data-k="s5" data-answer="neither">
+          <p class="qtext"><span class="q">05</span>The approved AI platform opens with a suggested thesis before the student has written anything.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal mid"><b>Neither &mdash; this is friction removed.</b> A vendor default decided what the task requires, and no one in the district chose it. Infrastructural conditions overrode instructional intent silently. This is the case the audit studio exists to catch.</div>
+        </div>
+        <div class="qrow" data-k="s6" data-answer="excl">
+          <p class="qtext"><span class="q">06</span>Every essay must be submitted with a full revision history and version log.</p>
+          <div class="opts" data-opts="Productive|Exclusionary|Neither"></div>
+          <div class="reveal mid"><b>Drifts exclusionary.</b> Revision histories are clues a teacher reads, not proof of understanding. A district that starts grading the documentation has built a compliance exercise with a research vocabulary &mdash; and it lands hardest on students who work in ways the log does not capture.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · CASES AND EVIDENCE ============ -->
+<section class="slide divider" data-seg="Cases and evidence" data-mark="50" data-notes="<p>Thirty minutes. Four findings, one activity, five cases. Move.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Three</p>
+    <h2>Cases and evidence</h2>
+    <p>What the research actually licenses you to say, and five implementation questions the statute does not settle.</p>
+    <p class="seg-clock">9:50 &ndash; 10:20 &middot; 30 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Cases and evidence" data-mark="51" data-notes="<p>Two minutes per study. The discipline you are modeling is stating what a finding <i>does not</i> support, immediately after stating what it does.</p><p>Superintendents get handed one of these four in a board meeting all the time, usually stripped of its qualifiers.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Four findings</p>
+    <h2>The evidence supports acting &mdash; with more precision than the debate allows</h2>
+    <div class="cols two">
+      <div class="box"><span class="tag">Beland &amp; Murphy, 2016</span><p><strong>Found:</strong> exam performance gains after English schools banned phones, concentrated among lower-achieving students.</p><p><strong>Limits:</strong> a different country, an earlier technology, and a policy environment that predates generative tools.</p></div>
+      <div class="box"><span class="tag">SMART Schools, 2025</span><p><strong>Found:</strong> across 30 English secondary schools and 1,227 adolescents, no evidence of better wellbeing and no evidence of lower overall phone use.</p><p><strong>Limits:</strong> cross-sectional. It compared schools that already differed, so it cannot tell you what would happen if <em>your</em> school changed.</p></div>
+      <div class="box"><span class="tag">Dutch national evaluation</span><p><strong>Found:</strong> schools reported improved concentration and climate after restrictions.</p><p><strong>Limits:</strong> reported experience, not measured outcomes. Both can be true at once, which points to a measurement gap rather than a contradiction.</p></div>
+      <div class="box"><span class="tag">Pew Research Center, 2024</span><p><strong>Found:</strong> 72 percent of U.S. public high school teachers call cellphone distraction a major classroom problem.</p><p><strong>Limits:</strong> it establishes that the problem is real. It says nothing about what any given remedy produces.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Cases and evidence" data-mark="56" data-notes="<p>Three minutes. This is the only slide in the deck that speaks to district-issued devices with hard numbers, so it carries weight &mdash; and it is the easiest slide here to overstate.</p><p><b>Do not say direct instruction does not work.</b> 0.31 is a moderate positive effect. The honest claim is about the margin, not about one approach being inert. An earlier version of this evidence base carried the wrong number and drew exactly that overclaim.</p><p>If someone asks &lsquo;so should we get rid of the Chromebooks too?&rsquo; this is the slide that answers them, and the answer is no.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Forty years of research</p>
+    <h2>Does the device matter, or what you do with it?</h2>
+    <p>Tamim and colleagues pooled 25 meta-analyses covering 1,055 primary studies to ask whether classroom technology affects achievement. The overall mean effect was <strong>0.35</strong>. Their moderator analysis splits it in two:</p>
+    <div class="cols two">
+      <div class="box"><span class="tag">Supporting instruction</span><p><strong>ES = 0.42</strong> &nbsp;(k = 10)<br>Technology that supports students in constructing understanding.</p></div>
+      <div class="box"><span class="tag">Direct instruction</span><p><strong>ES = 0.31</strong> &nbsp;(k = 15)<br>Technology that delivers content or drills it.</p></div>
+    </div>
+    <p class="tight">Read it carefully. <em>Both are moderate positive effects.</em> Technology used for direct instruction is not inert, and anyone who tells you the research says otherwise is overstating it. What the margin supports is narrower and more useful: how a task uses the device matters more than whether the device is in the room.</p>
+    <p class="fnote"><b>The limit:</b> this corpus predates smartphones and generative AI entirely. It tells you something about instructional design. It tells you nothing about phone policy.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Cases and evidence" data-mark="59" data-notes="<p><b>Eight minutes.</b> This is the highest-value eight minutes of the morning for a superintendent, because these are the exact sentences that end up in board packets.</p><p>Debrief line: <b>&lsquo;Make claims no stronger than the evidence permits. You will be quoted.&rsquo;</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Three activity</p>
+    <h2>Defensible, or one step too far?</h2>
+    <div class="activity">
+      <div class="act-head"><span class="lbl">Claims ladder</span><span>Four sentences a board member might hear. Which ones survive scrutiny?</span><span class="mins">8 min</span></div>
+      <div class="act-body" id="claims">
+        <div class="qrow" data-k="c1" data-answer="over">
+          <p class="qtext"><span class="q">01</span>&ldquo;Research shows that banning phones raises test scores.&rdquo;</p>
+          <div class="opts" data-opts="Defensible|Overclaimed"></div>
+          <div class="reveal no"><b>Overclaimed.</b> Beland and Murphy found gains in English schools before generative AI, concentrated in one group of students. Stated this way it becomes a universal prediction the study never made.</div>
+        </div>
+        <div class="qrow" data-k="c2" data-answer="ok">
+          <p class="qtext"><span class="q">02</span>&ldquo;A restriction may particularly benefit students who are currently struggling.&rdquo;</p>
+          <div class="opts" data-opts="Defensible|Overclaimed"></div>
+          <div class="reveal ok"><b>Defensible.</b> This is close to what Beland and Murphy actually support, and the hedge is doing honest work rather than covering you.</div>
+        </div>
+        <div class="qrow" data-k="c3" data-answer="over">
+          <p class="qtext"><span class="q">03</span>&ldquo;Studies show phone policies don&rsquo;t improve student wellbeing.&rdquo;</p>
+          <div class="opts" data-opts="Defensible|Overclaimed"></div>
+          <div class="reveal no"><b>Overclaimed.</b> SMART Schools found no <em>association</em> in a cross-sectional comparison of schools that already differed. Absence of an association is not evidence that changing a policy has no effect.</div>
+        </div>
+        <div class="qrow" data-k="c4" data-answer="ok">
+          <p class="qtext"><span class="q">04</span>&ldquo;Teachers report phone distraction as a serious classroom problem.&rdquo;</p>
+          <div class="opts" data-opts="Defensible|Overclaimed"></div>
+          <div class="reveal ok"><b>Defensible.</b> Pew, 2024. Note what it licenses: acting on a real problem. Not a prediction about what the action will produce.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Cases and evidence" data-mark="68" data-notes="<p>Five cases, roughly ninety seconds each. These are the practical questions that eat implementation, and the ones the ISBE template will not answer for them.</p><p>Storage is the one most districts have thought about least and will spend the most money on.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Five implementation questions</p>
+    <h2>What the template will not decide for you</h2>
+    <div class="cols">
+      <div class="box"><span class="tag">Storage</span><p>Pouches, classroom caddies, lockers, or backpacks. Each carries a different cost, a different liability question, and a different daily time tax on teachers.</p></div>
+      <div class="box"><span class="tag">Enforcement</span><p>Who confiscates, who stores, who returns, and what the escalation ladder is. Uneven enforcement produces discipline disparities faster than almost anything else.</p></div>
+      <div class="box"><span class="tag">Exceptions</span><p>Who determines a case-by-case caregiver exception, on what timeline, and how a student requests one without announcing their circumstances to a class.</p></div>
+      <div class="box"><span class="tag">One-to-one devices</span><p>Exempt from the statute, present in every classroom. If the concern was attention, the device you issued is still there.</p></div>
+      <div class="box"><span class="tag">Generative AI</span><p>What your approved platforms do the moment a student opens them &mdash; and whether that behavior matches what your teachers were told to expect.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BREAK ============ -->
+<section class="slide break-slide" data-seg="Break" data-mark="80" data-notes="<p>Ten minutes. Start the timer when you say the word.</p><p><b>Before you release them:</b> tell them to pull up their draft policy or the ISBE template now, so the studio starts on time rather than five minutes late while everyone hunts for a file.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Break</p>
+    <div class="clockface" id="breakClock">10:00</div>
+    <div class="ctl">
+      <button class="bbtn" id="brkStart">Start</button>
+      <button class="bbtn" id="brkReset">Reset</button>
+    </div>
+    <p>Pull up your draft policy or the ISBE template before you step away. The studio starts the moment we are back.</p>
+  </div>
+</section>
+
+<!-- ============ 5 · AUDIT STUDIO ============ -->
+<section class="slide divider" data-seg="District audit studio" data-mark="90" data-notes="<p><b>Fifty minutes &mdash; the core of the workshop.</b></p><p>Structure: 5 min setup, 30 min in breakouts, 15 min report-out.</p><p>If fewer than eight people are here, skip breakouts entirely and audit the ISBE template together in the main room. A three-person breakout with one silent participant is worse than no breakout.</p><p>Take a discretionary stretch break around the 60-minute mark of this segment if energy drops.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Four</p>
+    <h2>District audit studio</h2>
+    <p>Your policy, or the ISBE template, run against all five channels. This is where you build the thing you take home.</p>
+    <p class="seg-clock">10:30 &ndash; 11:20 &middot; 50 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="District audit studio" data-mark="91" data-notes="<p>Read the three questions aloud once, then send them to breakouts. Do not over-explain &mdash; the instrument is self-explanatory and they lose time listening to you.</p><p><b>Leave this slide up</b> or move to the next one and leave that up. Breakout rooms cannot see your screen, so tell them the questions are also in the page if they have the link.</p>">
+  <div class="wrap">
+    <p class="eyebrow">How the studio works</p>
+    <h2>Three questions, five channels</h2>
+    <ol class="numbered">
+      <li><strong>What does our policy actually say about this channel?</strong> Quote it if you can. &ldquo;Nothing&rdquo; is a legitimate and common answer.</li>
+      <li><strong>What is the gap?</strong> The distance between what the policy says and what happens in a classroom on a Tuesday.</li>
+      <li><strong>Who owns it, and by when?</strong> A name and a date. Not a committee, not &ldquo;curriculum.&rdquo;</li>
+    </ol>
+    <div class="box flag"><span class="tag">Ground rule</span><p>You will not finish all five well. Do two properly rather than five badly. The instrument comes home with you.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-seg="District audit studio" data-mark="96" data-notes="<p>Breakouts open here. 30 minutes.</p><p>Drop into rooms in this order: the quietest first, then the largest. Ask one question when you arrive &mdash; <b>&lsquo;which channel surprised you?&rsquo;</b> &mdash; and then leave them alone.</p><p>Two-minute warning before you close rooms.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Audit instrument &middot; part one</p>
+    <h2>The regulated channels</h2>
+    <div class="chan-block">
+      <div class="cb-head"><span class="n">01</span><h3>Personal phones, wearables, and personal computing devices</h3></div>
+      <div class="cb-body">
+        <div class="field"><label for="a1p">What our policy says</label><textarea id="a1p" data-wb="Channel 1 — policy"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label for="a1g">The gap</label><textarea id="a1g" data-wb="Channel 1 — gap"></textarea></div>
+          <div class="field"><label for="a1o">Owner and date</label><textarea id="a1o" data-wb="Channel 1 — owner"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="chan-block">
+      <div class="cb-head"><span class="n">02</span><h3>District-issued devices during the school day</h3></div>
+      <div class="cb-body">
+        <div class="field"><label for="a2p">What our policy says</label><textarea id="a2p" data-wb="Channel 2 — policy"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label for="a2g">The gap</label><textarea id="a2g" data-wb="Channel 2 — gap"></textarea></div>
+          <div class="field"><label for="a2o">Owner and date</label><textarea id="a2o" data-wb="Channel 2 — owner"></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="District audit studio" data-mark="106" data-notes="<p>Channel 3 is the one that produces the most silence. That silence is the finding.</p><p>If a room says &lsquo;we&rsquo;ve never checked what the platform does by default&rsquo; &mdash; that is a completed audit line, not a failure. Tell them so.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Audit instrument &middot; part two</p>
+    <h2>The channels the statute leaves open</h2>
+    <div class="chan-block">
+      <div class="cb-head"><span class="n">03</span><h3>Platform defaults and AI features</h3></div>
+      <div class="cb-body">
+        <div class="field"><label for="a3p">What happens when a student opens the approved tool</label><textarea id="a3p" data-wb="Channel 3 — policy"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label for="a3g">The gap</label><textarea id="a3g" data-wb="Channel 3 — gap"></textarea></div>
+          <div class="field"><label for="a3o">Owner and date</label><textarea id="a3o" data-wb="Channel 3 — owner"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="chan-block">
+      <div class="cb-head"><span class="n">04</span><h3>Take-home access</h3></div>
+      <div class="cb-body">
+        <div class="grid2">
+          <div class="field"><label for="a4g">The gap</label><textarea id="a4g" data-wb="Channel 4 — gap"></textarea></div>
+          <div class="field"><label for="a4o">Owner and date</label><textarea id="a4o" data-wb="Channel 4 — owner"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="chan-block">
+      <div class="cb-head"><span class="n">05</span><h3>What assignments ask students to produce</h3></div>
+      <div class="cb-body">
+        <div class="grid2">
+          <div class="field"><label for="a5g">The gap</label><textarea id="a5g" data-wb="Channel 5 — gap"></textarea></div>
+          <div class="field"><label for="a5o">Owner and date</label><textarea id="a5o" data-wb="Channel 5 — owner"></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="District audit studio" data-mark="116" data-notes="<p>Fifteen minutes. Take one channel from each room rather than a full tour &mdash; four rooms reporting everything is twenty minutes you do not have.</p><p>Ask for <b>the gap they did not expect</b>, not a summary.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Report out</p>
+    <h2>One finding per room</h2>
+    <ul class="plain">
+      <li>Name the channel and the gap in one sentence.</li>
+      <li>Say whether you could name an owner, or whether the honest answer is that nobody currently owns it.</li>
+      <li>Flag anything you found that you think other districts in this room should check tonight.</li>
+    </ul>
+    <div class="field" style="max-width:820px"><label for="rep">Notes from the report-out</label><textarea id="rep" data-wb="Report-out notes" style="min-height:110px"></textarea></div>
+  </div>
+</section>
+
+<!-- ============ 6 · SYSTEM ALIGNMENT ============ -->
+<section class="slide divider" data-seg="System alignment" data-mark="140" data-notes="<p>Twenty-five minutes. The audit produced findings. This segment turns findings into conditions somebody has to fund and calendar.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Five</p>
+    <h2>System alignment</h2>
+    <p>Connecting the audit to pedagogy, equity, family communication, and the conditions that decide whether any of it survives contact with a school year.</p>
+    <p class="seg-clock">11:20 &ndash; 11:45 &middot; 25 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="System alignment" data-mark="141" data-notes="<p>The key sentence: <b>&lsquo;Teachers can rebuild the task. Teachers cannot grant themselves the conditions the rebuild requires.&rsquo;</b></p><p>Walk the three moves quickly. The point is not the history lesson &mdash; it is how much of the redesign sits outside the classroom.</p>">
+  <div class="wrap">
+    <p class="eyebrow">What fills the space</p>
+    <h2>A restriction creates room. It does not decide what goes in it.</h2>
+    <p class="tight">One assessment, rebuilt in three moves &mdash; a middle-school history team asking students to explain why two accounts of the same event differ:</p>
+    <ol class="numbered">
+      <li>Students meet two short contrasting sources, name the disagreement, and offer a provisional explanation. This is the first moment a teacher can see how a student reads a source.</li>
+      <li>Students meet a competing explanation. A classmate can supply it. A prepared counterargument can supply it. An approved tool can supply it &mdash; if someone has checked that the tool will challenge a reading rather than hand over a better one.</li>
+      <li>Students explain one revision they made and why the evidence warranted it. Two or three sentences. A recording works. A short conference works.</li>
+    </ol>
+    <div class="box flag"><span class="tag">Notice</span><p>Someone has to find the source pairs, produce accessible versions, confirm what the platform does, and tell the team that a shorter, better-evidenced explanation will not read as a drop in rigor at evaluation time. None of that is a teacher decision.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-seg="System alignment" data-mark="147" data-notes="<p><b>Ten minutes.</b> Push them to name real risks, not categories. &lsquo;EL students&rsquo; is a category. &lsquo;A newcomer who uses phone translation to follow a class discussion&rsquo; is a risk.</p><p>The line worth repeating: <b>ask students where the rule would block them, rather than discovering it later through discipline records.</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Five activity</p>
+    <h2>Access risk register</h2>
+    <p class="tight">A quiet classroom can still exclude a learner. Name the risks now, while the conditions can still be changed.</p>
+    <div class="activity">
+      <div class="act-head"><span class="lbl">Register</span><span>Add a row per risk. Saved in your browser.</span><span class="mins">10 min</span></div>
+      <div class="act-body">
+        <div id="regRows" style="display:flex;flex-direction:column;gap:12px"></div>
+        <button class="addbtn" id="addRow">+ Add a risk</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="System alignment" data-mark="158" data-notes="<p>Four conditions, ninety seconds each. These are the ones that quietly kill a redesign, and every person in this room can authorize all four.</p>">
+  <div class="wrap">
+    <p class="eyebrow">The conditions</p>
+    <h2>Four things only leadership can grant</h2>
+    <div class="cols two">
+      <div class="box"><span class="tag">Time</span><p>A teaching team needs several hours together to rebuild one assessment well. Those hours exist inside a year that is already full. Name what comes off the calendar.</p></div>
+      <div class="box"><span class="tag">Access</span><p>Ask which supports students need to participate in the chosen task. A student who listens to a text may still perform the whole comparison. A student handed a generated interpretation does not.</p></div>
+      <div class="box"><span class="tag">Platform</span><p>Someone in the technology office confirms what the approved tool does by default, rather than leaving each teacher to discover it alone in October.</p></div>
+      <div class="box"><span class="tag">Evaluation</span><p>Tell principals what the redesigned work looks like from the doorway. A class arguing about two documents does not photograph like rigor, and teachers read that mismatch fast.</p></div>
+    </div>
+    <p class="tight">A district that adds the redesign without subtracting anything has decided the redesign is optional. Everyone in the building will understand that decision correctly.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="System alignment" data-mark="164" data-notes="<p>Family communication is the piece most districts underbuild, and the one that generates the loudest board meeting in September 2027.</p><p>Ask: <b>who is drafting the parent letter, and has anyone shown it to a parent yet?</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">Family communication</p>
+    <h2>The message that arrives before the policy does</h2>
+    <ul class="plain">
+      <li>Parents hear &ldquo;my child cannot reach me&rdquo; before they hear anything about attention or learning. Answer that first, in the first paragraph.</li>
+      <li>Say plainly how a family reaches a student in an emergency, and how a student requests an exception without disclosing their circumstances to a classroom.</li>
+      <li>Do not promise outcomes the evidence will not carry. A letter that claims test scores will rise is a letter you will be asked about in eighteen months.</li>
+    </ul>
+    <div class="field" style="max-width:820px"><label for="fam">Who drafts it, and when does it go out?</label><textarea id="fam" data-wb="Family communication plan"></textarea></div>
+  </div>
+</section>
+
+<!-- ============ 7 · COMMITMENTS ============ -->
+<section class="slide divider" data-seg="Commitments" data-mark="165" data-notes="<p>Fifteen minutes. Land the plane. Do not introduce anything new.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Six</p>
+    <h2>Commitments</h2>
+    <p>The rationale you can hand a board, and the next three decisions that belong to you rather than to a committee.</p>
+    <p class="seg-clock">11:45 &ndash; 12:00 &middot; 15 minutes</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Commitments" data-mark="166" data-notes="<p><b>Eight minutes to fill this in.</b> Tell them these five fit in a single motion &mdash; that is the whole pitch. It is not a new initiative, it is five sentences attached to a vote they are already taking.</p><p>Whatever they type here goes into the export.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Segment Six activity</p>
+    <h2>Five commitments that fit in one motion</h2>
+    <div class="activity">
+      <div class="act-head"><span class="lbl">Rationale builder</span><span>Fill these in and they go into your export.</span><span class="mins">8 min</span></div>
+      <div class="act-body">
+        <div class="field"><label for="k1">1 &middot; Who is accountable for instructional follow-through? A name, not a committee.</label><input id="k1" data-wb="Commitment 1 — accountable person" type="text"></div>
+        <div class="field"><label for="k2">2 &middot; What planning time is protected, and what comes off the calendar to make room?</label><input id="k2" data-wb="Commitment 2 — protected time" type="text"></div>
+        <div class="field"><label for="k3">3 &middot; Who reviews access before conditions change, and by when?</label><input id="k3" data-wb="Commitment 3 — access review" type="text"></div>
+        <div class="field"><label for="k4">4 &middot; Who checks what the approved platforms do by default?</label><input id="k4" data-wb="Commitment 4 — platform check" type="text"></div>
+        <div class="field"><label for="k5">5 &middot; What date does the cabinet look at this again?</label><input id="k5" data-wb="Commitment 5 — return date" type="text"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-seg="Commitments" data-mark="172" data-notes="<p>Say this one slowly. It is the sentence people quote back to you months later.</p><p><b>&lsquo;Falling confiscation counts answer the first question well. They tell you nothing about the third.&rsquo;</b></p>">
+  <div class="wrap">
+    <p class="eyebrow">Before you claim anything</p>
+    <h2>Three questions, kept apart</h2>
+    <div class="cols">
+      <div class="box"><span class="tag">Implementation</span><h3>Is the restriction workable?</h3><p>Staff experience, interruptions, enforcement time, and the pattern of exceptions. Confiscations falling can mean compliance. It can also mean uneven enforcement, or a change in how staff report.</p></div>
+      <div class="box"><span class="tag">Access</span><h3>Can students participate?</h3><p>Whether the supports students need survived the new conditions. Describe the problems without turning any student&rsquo;s accommodation into an anecdote.</p></div>
+      <div class="box"><span class="tag">Learning</span><h3>What can students explain or do?</h3><p>A reasoning checkpoint gives a teacher something to interpret. It does not certify authorship. Whether a capacity transfers requires evidence from later work with different sources.</p></div>
+    </div>
+    <p class="tight">Districts collapse these three into one and then draw conclusions none of the evidence supports. One redesigned assessment cannot show that a phone policy caused an instructional outcome.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Commitments" data-mark="176" data-notes="<p>Walk them through the export button before you close. If the button is not available in their view, tell them to use the browser print dialogue and save as PDF instead.</p><p>Their work is in their own browser only. If they clear site data, it is gone. Say that out loud.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Take it with you</p>
+    <h2>Export your audit</h2>
+    <p class="tight">Everything you entered this morning &mdash; the coverage map, the access register, the report-out notes, and the five commitments &mdash; assembles into one file.</p>
+    <button class="export-btn" id="exportBtn">Save my completed audit</button>
+    <p class="export-note" id="exportNote">Saves as a Markdown file you can paste into a board memo or a cabinet agenda.</p>
+    <p class="export-note">Your entries live in this browser only. Nothing you typed was sent anywhere, and nothing is stored on a server. If you clear site data, it is gone &mdash; so export before you close the tab.</p>
+  </div>
+</section>
+
+<section class="slide" data-seg="Commitments" data-mark="178" data-notes="<p>Thirty seconds. Then stop &mdash; ending two minutes early on a three-hour Zoom is a gift, not a failure.</p>">
+  <div class="wrap">
+    <p class="eyebrow">Where this comes from</p>
+    <h2>Resources</h2>
+    <ul class="plain">
+      <li><strong>Illinois Public Act 104-0657</strong> (SB 2427) and the ISBE template policy released September 1, 2026.</li>
+      <li><strong>The Pouch and the Bypass</strong> &mdash; the district audit protocol this session is built on.</li>
+      <li><strong>The Pedagogical Friction Framework</strong> &mdash; the four dimensions in full.</li>
+      <li><strong>Beland &amp; Murphy (2016)</strong>, <em>Labour Economics</em> 41. <strong>Goodyear et al. (2025)</strong>, <em>Lancet Regional Health Europe</em> 51. <strong>Kapur (2016)</strong>, <em>Educational Psychologist</em> 51(2). <strong>Pew Research Center (2024)</strong>.</li>
+    </ul>
+    <div class="title-meta">
+      <span>Micah Miner, M.Ed., Ed.S., CETL</span><span>admin@micahminer.com</span><span>micahminer.com</span>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<aside class="notes" id="notes" hidden>
+  <h4>Facilitator notes</h4>
+  <div class="ntext" id="notesText"></div>
+</aside>
+
+<div class="chrome">
+  <div class="progress" id="prog"></div>
+  <button class="cbtn" id="prev" aria-label="Previous slide">&#8592;</button>
+  <button class="cbtn" id="next" aria-label="Next slide">&#8594;</button>
+  <button class="cbtn wide" id="menuBtn">Agenda</button>
+  <span class="seg-now" id="segNow"></span>
+  <button class="timer" id="timer" title="Click to start or stop the session timer">Start timer</button>
+  <button class="cbtn wide" id="notesBtn" aria-pressed="false">Notes</button>
+  <span class="count" id="count"></span>
+</div>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu-in">
+    <h2>Agenda</h2>
+    <div id="menuList"></div>
+    <p class="hint">
+      <kbd>&#8594;</kbd> <kbd>space</kbd> next &nbsp; <kbd>&#8592;</kbd> back &nbsp; <kbd>N</kbd> facilitator notes &nbsp; <kbd>M</kbd> this menu &nbsp; <kbd>Esc</kbd> close
+    </p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var i = 0, total = slides.length;
+  var STORE = "friction-audit-2026-10-27";
+
+  /* ---------- storage ---------- */
+  var data = {};
+  try { data = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch(e){ data = {}; }
+  var saveTimer = null;
+  function persist(){
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(e){}
+    }, 250);
+  }
+
+  /* ---------- navigation ---------- */
+  var prog = document.getElementById("prog");
+  var segNow = document.getElementById("segNow");
+  var count = document.getElementById("count");
+  var notesEl = document.getElementById("notes");
+  var notesText = document.getElementById("notesText");
+  var notesBtn = document.getElementById("notesBtn");
+  var notesOpen = false;
+
+  function paintNotes(){
+    var n = slides[i].getAttribute("data-notes") || "<p>No notes for this slide.</p>";
+    notesText.innerHTML = n;
+  }
+  function go(n){
+    if (n < 0) n = 0;
+    if (n > total - 1) n = total - 1;
+    slides[i].classList.remove("on");
+    i = n;
+    slides[i].classList.add("on");
+    slides[i].scrollTop = 0;
+    prog.style.width = ((i) / (total - 1) * 100) + "%";
+    segNow.textContent = slides[i].getAttribute("data-seg") || "";
+    count.textContent = (i + 1) + " / " + total;
+    if (notesOpen) paintNotes();
+    tickTimer();
+  }
+  document.getElementById("next").addEventListener("click", function(){ go(i + 1); });
+  document.getElementById("prev").addEventListener("click", function(){ go(i - 1); });
+
+  function toggleNotes(force){
+    notesOpen = (typeof force === "boolean") ? force : !notesOpen;
+    notesEl.hidden = !notesOpen;
+    notesBtn.setAttribute("aria-pressed", notesOpen ? "true" : "false");
+    if (notesOpen) paintNotes();
+  }
+  notesBtn.addEventListener("click", function(){ toggleNotes(); });
+
+  /* ---------- menu ---------- */
+  var menu = document.getElementById("menu");
+  var menuList = document.getElementById("menuList");
+  var menuOpen = false;
+  function buildMenu(){
+    var groups = [], cur = null;
+    slides.forEach(function(s, idx){
+      var seg = s.getAttribute("data-seg") || "";
+      if (!cur || cur.seg !== seg){ cur = { seg: seg, items: [] }; groups.push(cur); }
+      var h = s.querySelector("h1, h2");
+      cur.items.push({ idx: idx, label: h ? h.textContent : "Slide " + (idx + 1) });
+    });
+    menuList.innerHTML = "";
+    groups.forEach(function(g){
+      var wrap = document.createElement("div");
+      wrap.className = "mgroup";
+      var gh = document.createElement("div");
+      gh.className = "gh";
+      var gn = document.createElement("span"); gn.className = "gn"; gn.textContent = g.seg;
+      var gt = document.createElement("span"); gt.className = "gt"; gt.textContent = g.items.length + " slides";
+      gh.appendChild(gn); gh.appendChild(gt); wrap.appendChild(gh);
+      g.items.forEach(function(it){
+        var b = document.createElement("button");
+        b.className = "mitem" + (it.idx === i ? " act" : "");
+        b.innerHTML = '<span class="mn">' + (it.idx + 1) + '</span><span>' + it.label + '</span>';
+        b.addEventListener("click", function(){ go(it.idx); toggleMenu(false); });
+        wrap.appendChild(b);
+      });
+      menuList.appendChild(wrap);
+    });
+  }
+  function toggleMenu(force){
+    menuOpen = (typeof force === "boolean") ? force : !menuOpen;
+    if (menuOpen) buildMenu();
+    menu.hidden = !menuOpen;
+  }
+  document.getElementById("menuBtn").addEventListener("click", function(){ toggleMenu(); });
+
+  document.addEventListener("keydown", function(e){
+    var t = e.target;
+    var typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA");
+    if (e.key === "Escape"){ if (menuOpen) toggleMenu(false); else if (notesOpen) toggleNotes(false); return; }
+    if (typing) return;
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " "){ e.preventDefault(); go(i + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp"){ e.preventDefault(); go(i - 1); }
+    else if (e.key === "Home"){ e.preventDefault(); go(0); }
+    else if (e.key === "End"){ e.preventDefault(); go(total - 1); }
+    else if (e.key === "n" || e.key === "N"){ toggleNotes(); }
+    else if (e.key === "m" || e.key === "M"){ toggleMenu(); }
+  });
+
+  /* ---------- session timer ---------- */
+  var timerBtn = document.getElementById("timer");
+  var startedAt = null, tId = null;
+  function two(n){ return (n < 10 ? "0" : "") + n; }
+  function tickTimer(){
+    if (!startedAt){ timerBtn.textContent = "Start timer"; return; }
+    var mins = (Date.now() - startedAt) / 60000;
+    var mark = parseFloat(slides[i].getAttribute("data-mark") || "0");
+    var segIsLater = slides[i].getAttribute("data-seg");
+    // marks are minutes from 9:00 for every slide after the opening segment
+    var d = mins - mark;
+    var cls = Math.abs(d) < 2 ? "" : (d < 0 ? "ahead" : "behind");
+    var word = d < 0 ? Math.round(-d) + "m ahead" : Math.round(d) + "m behind";
+    if (Math.abs(d) < 2) word = "on time";
+    timerBtn.innerHTML = two(Math.floor(mins / 60)) + ":" + two(Math.floor(mins % 60)) +
+      '<span class="delta ' + cls + '">' + word + "</span>";
+  }
+  timerBtn.addEventListener("click", function(){
+    if (startedAt){ startedAt = null; clearInterval(tId); tId = null; }
+    else { startedAt = Date.now(); tId = setInterval(tickTimer, 5000); }
+    tickTimer();
+  });
+
+  /* ---------- break countdown ---------- */
+  var bc = document.getElementById("breakClock");
+  var bEnd = null, bId = null;
+  function paintBreak(){
+    var left = bEnd ? Math.max(0, Math.round((bEnd - Date.now()) / 1000)) : 600;
+    bc.textContent = two(Math.floor(left / 60)) + ":" + two(left % 60);
+    if (bEnd && left <= 0){ clearInterval(bId); bId = null; bEnd = null; }
+  }
+  document.getElementById("brkStart").addEventListener("click", function(){
+    bEnd = Date.now() + 600000;
+    if (bId) clearInterval(bId);
+    bId = setInterval(paintBreak, 500);
+    paintBreak();
+  });
+  document.getElementById("brkReset").addEventListener("click", function(){
+    if (bId) clearInterval(bId);
+    bId = null; bEnd = null; paintBreak();
+  });
+  paintBreak();
+
+  /* ---------- choice activities ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll(".opts"), function(box){
+    var row = box.closest(".qrow");
+    var key = row.getAttribute("data-k");
+    var labels = (box.getAttribute("data-opts") || "").split("|");
+    labels.forEach(function(lab){
+      var b = document.createElement("button");
+      b.className = "opt";
+      b.type = "button";
+      b.textContent = lab;
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function(){
+        Array.prototype.forEach.call(box.querySelectorAll(".opt"), function(o){ o.setAttribute("aria-pressed", "false"); });
+        b.setAttribute("aria-pressed", "true");
+        data[key] = lab;
+        persist();
+        var rev = row.querySelector(".reveal");
+        if (rev) rev.classList.add("show");
+      });
+      box.appendChild(b);
+    });
+    if (data[key]){
+      Array.prototype.forEach.call(box.querySelectorAll(".opt"), function(o){
+        if (o.textContent === data[key]){
+          o.setAttribute("aria-pressed", "true");
+          var rev = row.querySelector(".reveal");
+          if (rev) rev.classList.add("show");
+        }
+      });
+    }
+  });
+
+  /* ---------- text fields ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-wb]"), function(el){
+    var k = el.id;
+    if (data[k]) el.value = data[k];
+    el.addEventListener("input", function(){ data[k] = el.value; persist(); });
+  });
+
+  /* ---------- access risk register ---------- */
+  var regRows = document.getElementById("regRows");
+  var regState = Array.isArray(data.reg) ? data.reg : [];
+  function saveReg(){ data.reg = regState; persist(); }
+  function drawReg(){
+    regRows.innerHTML = "";
+    regState.forEach(function(r, n){
+      var row = document.createElement("div");
+      row.className = "reg-row";
+      row.innerHTML =
+        '<div class="field"><label>Risk</label><input type="text" data-f="risk"></div>' +
+        '<div class="field"><label>Who is affected</label><input type="text" data-f="who"></div>' +
+        '<div class="field"><label>Owner</label><input type="text" data-f="owner"></div>' +
+        '<div class="field"><label>Check by</label><input type="text" data-f="date"></div>' +
+        '<button class="rm" type="button">Remove</button>';
+      Array.prototype.forEach.call(row.querySelectorAll("input"), function(inp){
+        var f = inp.getAttribute("data-f");
+        inp.value = r[f] || "";
+        inp.addEventListener("input", function(){ r[f] = inp.value; saveReg(); });
+      });
+      row.querySelector(".rm").addEventListener("click", function(){
+        regState.splice(n, 1); saveReg(); drawReg();
+      });
+      regRows.appendChild(row);
+    });
+  }
+  document.getElementById("addRow").addEventListener("click", function(){
+    regState.push({ risk:"", who:"", owner:"", date:"" }); saveReg(); drawReg();
+  });
+  if (!regState.length) regState.push({ risk:"", who:"", owner:"", date:"" });
+  drawReg();
+
+  /* ---------- export ---------- */
+  var exportBtn = document.getElementById("exportBtn");
+  var exportNote = document.getElementById("exportNote");
+  var downloads = null;
+
+  function buildDoc(){
+    var L = [];
+    L.push("# Friction Audit — completed worksheet");
+    L.push("");
+    L.push("The Friction Audit: What Your Phone Policy Cannot Do");
+    L.push("PD365 · October 27, 2026 · facilitated by Micah Miner");
+    L.push("");
+    L.push("Illinois Public Act 104-0657 (SB 2427), effective 2027–28.");
+    L.push("");
+    L.push("## Coverage map");
+    L.push("");
+    var chans = [
+      ["1. Personal phones, wearables, personal devices", "a1p", "a1g", "a1o"],
+      ["2. District-issued devices during the school day", "a2p", "a2g", "a2o"],
+      ["3. Platform defaults and AI features", "a3p", "a3g", "a3o"],
+      ["4. Take-home access", null, "a4g", "a4o"],
+      ["5. What assignments ask students to produce", null, "a5g", "a5o"]
+    ];
+    chans.forEach(function(c){
+      L.push("### " + c[0]);
+      if (c[1]) L.push("**What our policy says:** " + (data[c[1]] || "—"));
+      L.push("**The gap:** " + (data[c[2]] || "—"));
+      L.push("**Owner and date:** " + (data[c[3]] || "—"));
+      L.push("");
+    });
+    L.push("## Access risk register");
+    L.push("");
+    var rows = (data.reg || []).filter(function(r){ return r.risk || r.who || r.owner || r.date; });
+    if (rows.length){
+      L.push("| Risk | Who is affected | Owner | Check by |");
+      L.push("| --- | --- | --- | --- |");
+      rows.forEach(function(r){
+        L.push("| " + (r.risk||"—") + " | " + (r.who||"—") + " | " + (r.owner||"—") + " | " + (r.date||"—") + " |");
+      });
+    } else {
+      L.push("_No risks recorded._");
+    }
+    L.push("");
+    L.push("## Family communication");
+    L.push("");
+    L.push(data.fam || "—");
+    L.push("");
+    L.push("## Report-out notes");
+    L.push("");
+    L.push(data.rep || "—");
+    L.push("");
+    L.push("## Five commitments for the adopting motion");
+    L.push("");
+    var ks = [
+      ["Accountable for instructional follow-through", "k1"],
+      ["Protected planning time, and what it replaces", "k2"],
+      ["Access review before conditions change", "k3"],
+      ["Who checks platform defaults", "k4"],
+      ["Date the cabinet returns to this", "k5"]
+    ];
+    ks.forEach(function(k, n){
+      L.push((n + 1) + ". **" + k[0] + ":** " + (data[k[1]] || "—"));
+    });
+    L.push("");
+    L.push("## Before claiming a result, keep three questions apart");
+    L.push("");
+    L.push("1. **Is the restriction workable?** Measures implementation.");
+    L.push("2. **Can students participate?** Measures access.");
+    L.push("3. **What can students explain or do?** Measures learning.");
+    L.push("");
+    L.push("Falling confiscation counts answer the first. They say nothing about the third.");
+    L.push("");
+    return L.join("\n");
+  }
+
+  exportBtn.addEventListener("click", function(){
+    if (!downloads){
+      exportNote.textContent = "Saving is not available in this view. Use your browser's print dialogue and choose Save as PDF instead.";
+      return;
+    }
+    exportBtn.disabled = true;
+    downloads.save({ filename: "friction-audit-completed.md", data: buildDoc() })
+      .then(function(){
+        exportNote.textContent = "Saved. Open it alongside your draft policy when you brief the cabinet.";
+      })
+      .catch(function(err){
+        var code = err && err.code;
+        if (code === "declined") exportNote.textContent = "No file was saved. Click again whenever you are ready.";
+        else if (code === "rate_limited") exportNote.textContent = "A save prompt is already open. Finish that one first.";
+        else exportNote.textContent = "Saving is not available in this view. Use your browser's print dialogue and choose Save as PDF instead.";
+      })
+      .then(function(){ exportBtn.disabled = false; });
+  });
+
+  if (window.claude && typeof window.claude.use === "function"){
+    window.claude.use("downloads").then(function(d){ downloads = d; }).catch(function(){});
+  }
+
+  /* ---------- boot ---------- */
+  go(0);
+})();
+</script>

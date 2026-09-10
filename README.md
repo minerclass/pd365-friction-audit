@@ -34,6 +34,7 @@ Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers t
 | :--- | :--- |
 | [`/`](https://minerclass.github.io/pd365-friction-audit/) | Session hub and pre-work |
 | [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck — 34 slides, 7 segments, 4 activities, working audit instrument |
+| `/src/deck.source.html` | Canonical deck source, including facilitator notes. `/deck/` is generated from it — see [AGENT_HANDOFF.md](AGENT_HANDOFF.md) |
 | [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk — 8 questions × 3 device contexts |
 | [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set — annotated sources with what each does and does not support |
 

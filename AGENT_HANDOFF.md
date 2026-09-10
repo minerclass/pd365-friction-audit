@@ -67,13 +67,21 @@ The brief promises these by name. Participants have been told they receive them.
 
 **They are not independently maintained.** The repo copy is generated from the artifact source by a strip script. If you edit `/deck/index.html` directly, your change will be silently destroyed the next time anyone regenerates it.
 
-### 3.2 The notes-bearing source is not in this repo
+### 3.2 The deck workflow — edit the source, never the build
 
-This is the most fragile thing in the project. The deck source that carries facilitator notes currently lives only in (a) the published artifact and (b) a session scratchpad that no longer exists.
+`src/deck.source.html` is the **canonical deck**. It carries facilitator notes on all 34 slides. `deck/index.html` is generated from it and is what GitHub Pages serves.
 
-The strip script is committed at `tools/build_participant_deck.py` so the transformation is reproducible, but it needs the notes-bearing source as input.
+```bash
+# edit src/deck.source.html, then:
+python tools/build_participant_deck.py src/deck.source.html deck/index.html
+# commit both
+```
 
-**Before doing substantial deck work, resolve this with Micah.** Two options: commit the source to `src/deck.source.html` and accept that the facilitator notes become readable in a public repo, or keep the artifact as the canonical source and export from it before each edit. The notes were deliberately excluded from the public build — one of them plans for a thin-attendance contingency, which reads poorly next to a partner's event listing. Do not commit that source on your own judgment.
+The script refuses to write if any notes markup survives the strip or if the slide count changes during the build, so a broken edit fails loudly rather than shipping notes to participants. The build is verified byte-reproducible against the published deck.
+
+Committing the source was a deliberate decision by Micah on September 9, 2026, accepting that the facilitator notes are readable in a public repo in exchange for the source surviving independently of the artifact host. **The notes are still stripped from the served deck** — that has not changed, and should not change without asking. Some of them plan contingencies that read poorly beside a partner's event listing.
+
+The source is also an artifact-style fragment: bare `<title>`, `<link>` and `<style>` followed by body content, with no `<html>`/`<head>`/`<body>` wrapper. That is intentional — the artifact host supplies the skeleton, and the build script supplies it for Pages. Do not "fix" it by adding a doctype.
 
 ### 3.3 Who owns what
 
@@ -197,10 +205,11 @@ An agent should not email Ryan, draft messages to him, or make commitments on Mi
 
 **This repo**
 - `/index.html` — hub, pre-work, links out
-- `/deck/index.html` — generated participant deck; see §3.1 before editing
+- `/src/deck.source.html` — **canonical deck**, with facilitator notes on all 34 slides
+- `/deck/index.html` — generated participant deck; never hand-edit, see §3.2
 - `/crosswalk/index.html` — the leave-behind matrix
 - `/resources/index.html` — annotated sources
-- `/tools/build_participant_deck.py` — the strip script
+- `/tools/build_participant_deck.py` — source-to-Pages build, with safety checks
 
 **Companion repos**
 - [`screen-time-wrong-question`](https://github.com/minerclass/screen-time-wrong-question) → `/pouch-and-bypass/` — the full argument and the six-question district audit protocol this workshop operationalizes. **Audited clean:** four DOIs, all resolving correctly, no effect-size claims. This is the most reliable artifact in the ecosystem and the right thing to hand a board member.
