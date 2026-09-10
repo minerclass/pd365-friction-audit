@@ -6,7 +6,8 @@
 
 Workshop materials for a three-hour online session with **PD365** on **October 27, 2026, 9:00 a.m.–12:00 p.m. Central**, for Illinois district teams implementing Public Act 104-0657.
 
-🔗 **[minerclass.github.io/pd365-friction-audit](https://minerclass.github.io/pd365-friction-audit/)**
+🔗 **Materials:** [minerclass.github.io/pd365-friction-audit](https://minerclass.github.io/pd365-friction-audit/)
+🎫 **Registration:** [PD365 event listing](https://pd365.net/professional-learning-opportunities/upcoming-conferences-workshops/category/live-online-and-on-demand-recorded/event/2026/10/27/what-your-phone-policy-cannot-do-the-friction-audit-with-micah-miner) — live online and on-demand, 3 PD hours
 
 ---
 
