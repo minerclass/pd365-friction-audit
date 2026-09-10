@@ -68,6 +68,12 @@ The brief promises these by name. Participants have been told they receive them.
 
 **Only the source is hand-maintained.** If you edit `/deck/index.html` directly, your change will be silently destroyed the next time anyone runs the build. If you edit only the artifact, the repo falls behind.
 
+**Nothing enforces that the three stay in sync.** They were aligned when this repo was created on September 9, 2026, and there is no CI check, no hook, and no version stamp in the deck to tell you whether they still are. Assume drift until you have checked.
+
+To check: read the published artifact's HTML and diff it against the committed source. They should differ only in whatever the artifact host wraps around the fragment. If the slide counts differ, or a slide's text differs, the artifact is ahead and the repo is stale — reconcile before editing either, and treat the artifact as ahead unless git history says otherwise, since it is the copy Micah edits under time pressure while presenting.
+
+After any deck change the full sequence is: edit `src/deck.source.html`, run the build, republish the artifact from the same source file, commit both. Skipping the third step is the most likely way this drifts.
+
 ### 3.2 The deck workflow — edit the source, never the build
 
 `src/deck.source.html` is the **canonical deck**. It carries facilitator notes on all 34 slides. `deck/index.html` is generated from it and is what GitHub Pages serves.
