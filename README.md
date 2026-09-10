@@ -22,6 +22,12 @@ ISBE's own *Model Cell Phone Policy* reports the second half of the problem: fro
 
 ---
 
+## For agents and collaborators
+
+Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers the fixed agenda, the contractual participant takeaways, the citation-verification rules this project runs under, and the fact that `/deck/index.html` is generated rather than hand-edited.
+
+---
+
 ## Contents
 
 | Path | What it is |
