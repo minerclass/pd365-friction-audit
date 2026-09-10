@@ -60,12 +60,13 @@ The brief promises these by name. Participants have been told they receive them.
 
 ## 3. Non-obvious things that will trip you up
 
-### 3.1 The deck exists in two forms, and one is generated from the other
+### 3.1 The deck exists in three forms, and two are generated
 
-- **The artifact copy** is what Micah presents from. It carries facilitator notes on every slide (toggled with `N`) and a working export button backed by the Claude `downloads` capability.
-- **The repo copy** at `/deck/index.html` is a *participant* build. Facilitator notes, the notes panel, the `N` key binding, and the Notes button are stripped out. The export button degrades to "use your browser's print dialogue."
+- **`src/deck.source.html`** is the source of truth. Facilitator notes on every slide. Edit this one.
+- **`deck/index.html`** is the *participant* build served by Pages. Notes, the notes panel, the `N` binding, and the Notes button are stripped. The export button degrades to "use your browser's print dialogue" because `window.claude` is absent outside the artifact host.
+- **The published artifact** is what Micah presents from. Same content as the source, plus a working export backed by the Claude `downloads` capability. Republish it from the source when the source changes.
 
-**They are not independently maintained.** The repo copy is generated from the artifact source by a strip script. If you edit `/deck/index.html` directly, your change will be silently destroyed the next time anyone regenerates it.
+**Only the source is hand-maintained.** If you edit `/deck/index.html` directly, your change will be silently destroyed the next time anyone runs the build. If you edit only the artifact, the repo falls behind.
 
 ### 3.2 The deck workflow — edit the source, never the build
 
