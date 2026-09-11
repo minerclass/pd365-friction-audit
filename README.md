@@ -7,7 +7,7 @@
 Workshop materials for a three-hour online session with **PD365** on **October 27, 2026, 9:00 a.m.–12:00 p.m. Central**, for Illinois district teams implementing Public Act 104-0657.
 
 🔗 **Materials:** [minerclass.github.io/pd365-friction-audit](https://minerclass.github.io/pd365-friction-audit/)
-🎫 **Registration:** [PD365 event listing](https://pd365.net/professional-learning-opportunities/upcoming-conferences-workshops/category/live-online-and-on-demand-recorded/event/2026/10/27/what-your-phone-policy-cannot-do-the-friction-audit-with-micah-miner) — live online and on-demand, 3 PD hours
+🎫 **Registration:** [PD365 event listing](https://pd365.net/professional-learning-opportunities/upcoming-conferences-workshops/category/live-online-and-on-demand-recorded/event/2026/10/27/what-your-phone-policy-cannot-do-the-friction-audit-with-micah-miner), live online and on-demand, 3 PD hours
 
 ---
 
@@ -34,10 +34,10 @@ Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers t
 | Path | What it is |
 | :--- | :--- |
 | [`/`](https://minerclass.github.io/pd365-friction-audit/) | Session hub and pre-work |
-| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck — 34 slides, 7 segments, 4 activities, working audit instrument |
-| `/src/deck.source.html` | Canonical deck source, including facilitator notes. `/deck/` is generated from it — see [AGENT_HANDOFF.md](AGENT_HANDOFF.md) |
-| [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk — 8 questions × 3 device contexts |
-| [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set — annotated sources with what each does and does not support |
+| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck: 34 slides, 7 segments, 4 activities, working audit instrument |
+| `/src/deck.source.html` | Canonical deck source, including facilitator notes. `/deck/` is generated from it, see [AGENT_HANDOFF.md](AGENT_HANDOFF.md) |
+| [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk: 8 questions × 3 device contexts |
+| [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set, annotated sources with what each does and does not support |
 
 Everything is a static page. No build step, no dependencies, no analytics. Participant entries in the deck are held in `localStorage` on the participant's own device and are never transmitted.
 
@@ -49,22 +49,22 @@ Seven segments over three hours, matching the agenda PD365 published:
 
 | Time | Segment |
 | :--- | :--- |
-| 0:00–0:20 | Policy context — the legal floor and the limits of compliance |
-| 0:20–0:50 | Friction framework — productive versus exclusionary difficulty |
-| 0:50–1:20 | Cases and evidence — what the research licenses you to claim |
+| 0:00–0:20 | Policy context, the legal floor and the limits of compliance |
+| 0:20–0:50 | Friction framework, productive versus exclusionary difficulty |
+| 0:50–1:20 | Cases and evidence, what the research licenses you to claim |
 | 1:20–1:30 | Break |
-| 1:30–2:20 | District audit studio — five channels, three questions each |
-| 2:20–2:45 | System alignment — time, access, platform, evaluation |
-| 2:45–3:00 | Commitments — the board-ready rationale |
+| 1:30–2:20 | District audit studio, five channels, three questions each |
+| 2:20–2:45 | System alignment: time, access, platform, evaluation |
+| 2:45–3:00 | Commitments: the board-ready rationale |
 
 ---
 
 ## Companion work
 
-- **[The Pouch and the Bypass](https://minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/)** — the full argument and the district audit protocol in its original form
-- **[K–12 Device Policy & Pedagogical Friction Evidence Hub](https://minerclass.github.io/k12-device-policy-evidence-hub/)** — the evidence matrix and search protocol
-- **[The Pedagogical Friction Framework](https://minerclass.github.io/pedagogical-friction/)** — noetic, rhetorical, existential, infrastructural
-- **[When the Output Looks Like Learning](https://minerclass.github.io/When-Output-Looks-Like-Learning/)** — the instructional-design companion
+- **[The Pouch and the Bypass](https://minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/)**, the full argument and the district audit protocol in its original form
+- **[K–12 Device Policy & Pedagogical Friction Evidence Hub](https://minerclass.github.io/k12-device-policy-evidence-hub/)**, the evidence matrix and search protocol
+- **[The Pedagogical Friction Framework](https://minerclass.github.io/pedagogical-friction/)**, noetic, rhetorical, existential, infrastructural
+- **[When the Output Looks Like Learning](https://minerclass.github.io/When-Output-Looks-Like-Learning/)**, the instructional-design companion
 
 Framework citation: Miner, M. J. (2026). When the output looks like learning: Pedagogical friction and human agency in the age of generative AI. *i.e.: Inquiry in Education, 18*(1), Article 4.
 
