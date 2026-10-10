@@ -4,6 +4,7 @@
 **Delivery:** October 27, 2026, 9:00 a.m.–12:00 p.m. Central, on Zoom
 **Facilitator:** Micah J. Miner, M.Ed., Ed.S., CETL
 **Handoff written:** September 9, 2026
+**Updated:** October 10, 2026. The full deck and its facilitator notes moved out of this public repo, and `/deck/` is now a public preview. See §3.1.
 
 Read this before touching anything in the repo. Sections 3 and 4 contain the things most likely to waste your time or damage the work.
 
@@ -17,7 +18,7 @@ An Illinois-specific district leadership workshop built around Public Act 104-06
 
 The argument is not anti-restriction. The session is explicitly policy-neutral beyond what the law requires and is built to be equally useful to a district adopting bell-to-bell and one revising an existing policy. **Do not let edits drift it into an anti-ban or pro-ban piece.** That neutrality is a commitment made to the client in writing.
 
-The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Policy* (August 2026) reports, from the Phones in Focus study run with Harvard's Center for Education Policy Research, that teachers estimate **1 in 3 students** use laptops at school for nonacademic purposes. The state named the second problem in the document directing districts to solve the first.
+The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Policy* (August 2026) reports, from Phones in Focus, a national educator survey led by Angela Duckworth (University of Pennsylvania), that teachers estimate **1 in 3 students** use laptops at school for nonacademic purposes. ISBE invited Illinois educators to take part in partnership with Harvard's Center for Education Policy Research. Do not describe the study as Harvard's. The state named the second problem in the document directing districts to solve the first.
 
 ---
 
@@ -26,7 +27,7 @@ The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Poli
 | Asset | Location | Status |
 | :--- | :--- | :--- |
 | Session hub | `/index.html` | Complete |
-| Deck (participant copy) | `/deck/index.html` | Complete (36 slides, 7 published segments plus an appendix, 4 activities) |
+| Deck (public preview) | `/deck/index.html` | Five slides generated from the private source: title, definition, channel map, friction sort, and a closing slide. The full deck has 36 slides, 7 published segments plus an appendix, and 4 activities |
 | Policy-to-Practice Crosswalk | `/crosswalk/index.html` | Complete |
 | Illinois Resource Set | `/resources/index.html` | Complete |
 
@@ -75,33 +76,15 @@ The brief promises these by name. Participants have been told they receive them.
 
 ## 3. Non-obvious things that will trip you up
 
-### 3.1 The deck exists in three forms, and two are generated
+### 3.1 The deck: one private source, three generated copies
 
-- **`src/deck.source.html`** is the source of truth. Facilitator notes on every slide. Edit this one.
-- **`deck/index.html`** is the *participant* build served by Pages. Notes, the notes panel, the `N` binding, and the Notes button are stripped. The export button degrades to "use your browser's print dialogue" because `window.claude` is absent outside the artifact host.
-- **The published artifact** is what Micah presents from. Same content as the source, plus a working export backed by the Claude `downloads` capability. Republish it from the source when the source changes.
+Since October 10, 2026, the full deck is not in this repository. Micah decided that the public site should carry only a preview, which reverses his September 9 decision to commit the source here. The canonical source, `deck.source.html`, with facilitator notes on all 36 slides, lives with its two build scripts in Micah's private Research folder under `pd365-friction-audit-deck/`. That folder's README gives the full workflow. Earlier versions of `src/deck.source.html` and `tools/build_participant_deck.py` remain in this repository's git history. Do not restore them to the working tree.
 
-**Only the source is hand-maintained.** If you edit `/deck/index.html` directly, your change will be silently destroyed the next time anyone runs the build. If you edit only the artifact, the repo falls behind.
+- **Presenter copy.** Micah's private Claude artifact, published from the source with notes. It is what he presents from, and its export saves through the artifact's downloads capability.
+- **Participant copy.** A separate private Claude artifact built with `build_participant_deck.py --fragment`, notes stripped. Registrants get its link before the session, and its export works the same way.
+- **Public preview.** `deck/index.html` in this repo, built with `build_preview_deck.py`. It keeps four slides and adds a closing slide that points to registration and the free takeaways. Hidden stand-ins let the deck script run without the dropped slides.
 
-**Nothing enforces that the three stay in sync.** They were aligned when this repo was created on September 9, 2026, and there is no CI check, no hook, and no version stamp in the deck to tell you whether they still are. Assume drift until you have checked.
-
-To check: read the published artifact's HTML and diff it against the committed source. They should differ only in whatever the artifact host wraps around the fragment. If the slide counts differ, or a slide's text differs, the artifact is ahead and the repo is stale; reconcile before editing either, and treat the artifact as ahead unless git history says otherwise, since it is the copy Micah edits under time pressure while presenting.
-
-After any deck change the full sequence is: edit `src/deck.source.html`, run the build, republish the artifact from the same source file, commit both. Skipping the third step is the most likely way this drifts.
-
-### 3.2 The deck workflow: edit the source, never the build
-
-`src/deck.source.html` is the **canonical deck**. It carries facilitator notes on all 36 slides. `deck/index.html` is generated from it and is what GitHub Pages serves.
-
-```bash
-# edit src/deck.source.html, then:
-python tools/build_participant_deck.py src/deck.source.html deck/index.html
-# commit both
-```
-
-The script refuses to write if any notes markup survives the strip or if the slide count changes during the build, so a broken edit fails loudly rather than shipping notes to participants. The build is verified byte-reproducible against the published deck.
-
-Committing the source was a deliberate decision by Micah on September 9, 2026, accepting that the facilitator notes are readable in a public repo in exchange for the source surviving independently of the artifact host. **The notes are still stripped from the served deck**; that has not changed, and should not change without asking. Some of them plan contingencies that read poorly beside a partner's event listing.
+**Only the source is hand-maintained.** Never hand-edit `deck/index.html`; rebuild it. After any deck change, edit the source, rebuild the preview into a clone of this repo, republish both artifacts from the same source, and then commit here. Nothing enforces that the copies stay in sync, so diff before editing. **Never add the full deck, the source, the facilitator notes, or a link to either artifact to this public repo.**
 
 The source is also an artifact-style fragment: bare `<title>`, `<link>` and `<style>` followed by body content, with no `<html>`/`<head>`/`<body>` wrapper. That is intentional, the artifact host supplies the skeleton, and the build script supplies it for Pages. Do not "fix" it by adding a doctype.
 
@@ -147,6 +130,8 @@ What was wrong:
 | :--- | :--- |
 | PA 104-0657 provisions, exemptions, grandfather clause | Verified against the statute and the ISBE model policy PDF |
 | ISBE / Phones in Focus figures (60→74%, 9 in 10, 1 in 3, NCES 52%) | Verified against the ISBE *Model Cell Phone Policy*, August 2026 |
+| Phones in Focus attribution | Corrected 2026-10-10. Led by Angela Duckworth (University of Pennsylvania) with Hunt Allcott, Matt Gentzkow, and Tom Dee (Stanford), Brian Jacob (Michigan), and Jason Baron (Duke), per the February 27, 2026 release on the University of Michigan Ford School site. ISBE p. 1 says only that ISBE invited Illinois educators to participate in partnership with Harvard's CEPR |
+| Statute definition quote | Corrected 2026-10-10 to the verbatim text of 105 ILCS 5/10-20.88(a). The earlier quote was a paraphrase in quotation marks. The Act took effect on becoming law (July 28, 2026); 2027–28 is the policy deadline, not the effective date |
 | Goodyear et al. (2025), SMART Schools | DOI verified; findings match the published study |
 | Beland & Murphy (2016) | DOI verified |
 | Delgado et al. (2018), *g* = −0.21 | Verified against the abstract; it is the **overall** effect across genres, not an informational-text figure |
@@ -227,11 +212,12 @@ An agent should not email Ryan, draft messages to him, or make commitments on Mi
 
 **This repo**
 - `/index.html`: hub, pre-work, links out
-- `/src/deck.source.html`: **canonical deck**, with facilitator notes on all 36 slides
-- `/deck/index.html`: generated participant deck; never hand-edit, see §3.2
+- `/deck/index.html`: generated public preview; never hand-edit, see §3.1
 - `/crosswalk/index.html`: the leave-behind matrix
 - `/resources/index.html`: annotated sources
-- `/tools/build_participant_deck.py`: source-to-Pages build, with safety checks
+
+**Outside this repo**
+- Micah's private Research folder, `pd365-friction-audit-deck/`: the canonical deck source and both build scripts
 
 **Companion repos**
 - [`screen-time-wrong-question`](https://github.com/minerclass/screen-time-wrong-question) → `/pouch-and-bypass/`, the full argument and the six-question district audit protocol this workshop operationalizes. **Audited clean:** four DOIs, all resolving correctly, no effect-size claims. This is the most reliable artifact in the ecosystem and the right thing to hand a board member.

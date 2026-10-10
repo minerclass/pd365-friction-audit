@@ -15,17 +15,19 @@ Workshop materials for a three-hour online session with **PD365** on **October 2
 
 Public Act 104-0657 (SB 2427), signed July 28, 2026, requires Illinois districts to adopt a bell-to-bell wireless communication device policy before the 2027–28 school year. Its definition carries one consequential exclusion:
 
-> "Wireless communication device" does not include a device issued by the school or a teacher for educational purposes.
+> "Wireless communication device" does not include any device that a school district or teacher has directly issued to, provided for, or required a student to possess and use for educational purposes.
+>
+> 105 ILCS 5/10-20.88(a), added by Public Act 104-0657
 
 The statute regulates one channel of the screen ecology and exempts the rest by definition. Every district will be compliant by adopting the ISBE template. None will know, on that basis alone, whether anything about learning changed.
 
-ISBE's own *Model Cell Phone Policy* reports the second half of the problem: from the Phones in Focus study run with Harvard's Center for Education Policy Research, teachers estimate **1 in 3 students** are using laptops at school for nonacademic purposes.
+ISBE's own *Model Cell Phone Policy* reports the second half of the problem: in Phones in Focus, a national educator survey led by Angela Duckworth (University of Pennsylvania), teachers estimate **1 in 3 students** are using laptops at school for nonacademic purposes. ISBE invited Illinois educators to take part in the survey in partnership with Harvard's Center for Education Policy Research.
 
 ---
 
 ## For agents and collaborators
 
-Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers the fixed agenda, the contractual participant takeaways, the citation-verification rules this project runs under, and the fact that `/deck/index.html` is generated rather than hand-edited.
+Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers the fixed agenda, the contractual participant takeaways, the citation-verification rules this project runs under, and the fact that `/deck/index.html` is a generated public preview, not the full deck.
 
 ---
 
@@ -34,8 +36,7 @@ Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers t
 | Path | What it is |
 | :--- | :--- |
 | [`/`](https://minerclass.github.io/pd365-friction-audit/) | Session hub and pre-work |
-| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | The full three-hour deck: 34 slides, 7 segments, 4 activities, working audit instrument |
-| `/src/deck.source.html` | Canonical deck source, including facilitator notes. `/deck/` is generated from it, see [AGENT_HANDOFF.md](AGENT_HANDOFF.md) |
+| [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | A five-slide public preview of the deck. Registrants receive the full deck privately before the session |
 | [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk: 8 questions × 3 device contexts |
 | [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set, annotated sources with what each does and does not support |
 
