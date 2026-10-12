@@ -27,7 +27,7 @@ The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Poli
 | Asset | Location | Status |
 | :--- | :--- | :--- |
 | Session hub | `/index.html` | Complete |
-| Deck (public preview) | `/deck/index.html` | Five slides generated from the private source: title, definition, channel map, friction sort, and a closing slide. The full deck has 36 slides, 7 published segments plus an appendix, and 4 activities |
+| Deck (public preview) | `/deck/index.html` | Five slides generated from the private source: title, definition, channel map, friction sort, and a closing slide. The full deck has 59 slides, 7 published segments plus an appendix, and 7 activities, since the October 12, 2026 revision added a debate segment on Haidt and Horvath |
 | Policy-to-Practice Crosswalk | `/crosswalk/index.html` | Complete |
 | Illinois Resource Set | `/resources/index.html` | Complete |
 
