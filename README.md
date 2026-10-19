@@ -37,10 +37,11 @@ Read **[AGENT_HANDOFF.md](AGENT_HANDOFF.md)** before making changes. It covers t
 | :--- | :--- |
 | [`/`](https://minerclass.github.io/pd365-friction-audit/) | Session hub and pre-work |
 | [`/deck/`](https://minerclass.github.io/pd365-friction-audit/deck/) | A five-slide public preview of the deck. Registrants receive the full deck privately before the session |
+| [`/audit/`](https://minerclass.github.io/pd365-friction-audit/audit/) | Phone Policy Friction Audit: your policy run against five channels, with a printable one-page brief and a Markdown download |
 | [`/crosswalk/`](https://minerclass.github.io/pd365-friction-audit/crosswalk/) | Policy-to-Practice Crosswalk: 8 questions × 3 device contexts |
 | [`/resources/`](https://minerclass.github.io/pd365-friction-audit/resources/) | Illinois Resource Set, annotated sources with what each does and does not support |
 
-Everything is a static page. No build step, no dependencies, no analytics. Participant entries in the deck are held in `localStorage` on the participant's own device and are never transmitted.
+Everything is a static page. No build step, no dependencies, no analytics. Participant entries in the deck and the audit are held in `localStorage` on the participant's own device and are never transmitted.
 
 ---
 

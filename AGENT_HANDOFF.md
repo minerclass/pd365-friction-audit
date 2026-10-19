@@ -5,6 +5,7 @@
 **Facilitator:** Micah J. Miner, M.Ed., Ed.S., CETL
 **Handoff written:** September 9, 2026
 **Updated:** October 10, 2026. The full deck and its facilitator notes moved out of this public repo, and `/deck/` is now a public preview. See §3.1.
+**Updated:** October 19, 2026 (mac · claude-code). A standalone Phone Policy Friction Audit was built at `/audit/` and linked from the hub. It is not committed or pushed. Micah decides whether it goes public or stays registrant-only. See §6.1.
 
 Read this before touching anything in the repo. Sections 3 and 4 contain the things most likely to waste your time or damage the work.
 
@@ -30,6 +31,7 @@ The strongest single piece of evidence is ISBE's own: its *Model Cell Phone Poli
 | Deck (public preview) | `/deck/index.html` | Five slides generated from the private source: title, definition, channel map, friction sort, and a closing slide. The full deck has 59 slides, 7 published segments plus an appendix, and 7 activities, since the October 12, 2026 revision added a debate segment on Haidt and Horvath |
 | Policy-to-Practice Crosswalk | `/crosswalk/index.html` | Complete |
 | Illinois Resource Set | `/resources/index.html` | Complete |
+| Phone Policy Friction Audit | `/audit/index.html` | Built October 19, 2026; awaiting Micah's publication decision (§6.1) |
 
 Live at **https://minerclass.github.io/pd365-friction-audit/**. Static pages, no build step for deployment, no dependencies, no analytics. Participant entries in the deck are held in `localStorage` on the participant's own device and are never transmitted.
 
@@ -66,7 +68,7 @@ nothing from the published structure.
 
 The brief promises these by name. Participants have been told they receive them.
 
-1. **Phone Policy Friction Audit tool**; the deck's audit instrument covers this in-session. A standalone re-scoped version is still outstanding; see §6.
+1. **Phone Policy Friction Audit tool**; the deck's audit instrument covers this in-session. A standalone re-scoped version was built at `/audit/` on October 19, 2026 and is not yet published; see §6.1.
 2. **Policy-to-practice crosswalk** for phones, one-to-one devices, and generative AI, done, `/crosswalk/`.
 3. **Board-ready rationale template** plus stakeholder discussion prompts; the deck's Commitments segment covers the template; the discussion prompts are thin.
 4. **Implementation questions** for storage, enforcement, exceptions, access, and communication, partially covered by the "Five implementation questions" slide. Storage is the weakest.
@@ -176,6 +178,10 @@ An interactive audit exists at `minerclass/potential-outcomes-artifacts` → `fr
 
 Either re-scope it to policy and host it here, or decide the deck's in-session instrument satisfies the promise and say so plainly to PD365. Do not leave the ambiguity unresolved past mid-October.
 
+**October 19, 2026.** A re-scoped standalone version now exists at `/audit/index.html`. It follows the deck's audit studio (five channels, each asking what the policy says, the gap, and the owner and date) and adds the five promised implementation questions (storage, enforcement, exceptions, access, communication), the access risk register, the six stakeholder prompts, an evidence plan sorted by implementation, access, and learning, and the five commitments. It saves to `localStorage` only, prints a one-page brief, and downloads Markdown. Every statutory statement was checked against the enacted text of 105 ILCS 5/10-20.88 on ilga.gov. It cites no studies.
+
+Open decision for Micah: the page reuses the wording of the private deck's audit, stakeholder, and commitments slides (not the facilitator notes). Pushing it publishes that wording on the free site, which the October 10 preview decision kept for registrants. The alternative is to publish it as a registrant-only link after October 27.
+
 ### 6.2 Strengthen the storage material
 
 Storage is named in the promised implementation questions and is the thinnest content in the deck. The ISBE template enumerates lockers, backpacks, classroom holders, locked pouches, and the school office, each with different cost, liability, and daily time-tax implications for teachers. One slide currently gestures at this. It deserves better, because it is the decision districts will spend real money on.
@@ -213,6 +219,7 @@ An agent should not email Ryan, draft messages to him, or make commitments on Mi
 **This repo**
 - `/index.html`: hub, pre-work, links out
 - `/deck/index.html`: generated public preview; never hand-edit, see §3.1
+- `/audit/index.html`: the standalone Phone Policy Friction Audit (unpublished as of October 19, 2026)
 - `/crosswalk/index.html`: the leave-behind matrix
 - `/resources/index.html`: annotated sources
 

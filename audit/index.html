@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>Phone Policy Friction Audit</title>
+<meta name="description" content="A working audit for Illinois district teams: your wireless communication device policy, or the ISBE template, run against five channels. Entries stay in your browser and print as a brief.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#f4f6f8; --surface:#ffffff; --sunk:#e9edf1;
+  --ink:#14202b; --ink-soft:#3d4a57; --muted:#5c6873;
+  --rule:#d7dde4; --rule-strong:#b6c0ca;
+  --accent:#1d4e6f; --accent-soft:#e5edf3; --on-accent:#ffffff;
+  --signal:#8c6014; --signal-soft:#f6efe0;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+    --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+    --rule:#2a3742; --rule-strong:#3d4c59;
+    --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+    --signal:#d7a747; --signal-soft:#2a2214;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1720; --surface:#17212b; --sunk:#131c25;
+  --ink:#e4eaef; --ink-soft:#b9c4cf; --muted:#8d9aa7;
+  --rule:#2a3742; --rule-strong:#3d4c59;
+  --accent:#7db4d6; --accent-soft:#1a2b38; --on-accent:#0f1720;
+  --signal:#d7a747; --signal-soft:#2a2214;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.page{max-width:1040px;margin:0 auto;padding:44px 24px 88px}
+@media(max-width:640px){.page{padding:28px 16px 60px}}
+h1,h2,h3{font-family:Newsreader,Georgia,"Times New Roman",serif;margin:0;font-weight:600;text-wrap:balance;line-height:1.14}
+h1{font-size:clamp(2rem,4.6vw,2.9rem);letter-spacing:-.015em}
+h2{font-size:1.45rem}
+h3{font-size:1.12rem}
+p{margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.masthead{display:flex;flex-direction:column;gap:13px;padding-bottom:24px;border-bottom:2px solid var(--ink)}
+.deck-line{font-size:1.05rem;color:var(--ink-soft);max-width:66ch}
+.deck-line em{color:var(--ink);font-style:italic}
+.origin{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);letter-spacing:.05em;display:flex;flex-wrap:wrap;gap:6px 22px;padding-top:6px}
+
+/* ---------- toolbar ---------- */
+.toolbar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule-strong);margin:0 -24px;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+@media(max-width:640px){.toolbar{position:static;margin:0 -16px;padding:10px 16px}}
+.btn{font:600 .85rem "Public Sans",system-ui,sans-serif;border-radius:3px;padding:8px 14px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.quiet{background:transparent;color:var(--muted);border-color:var(--rule-strong)}
+.btn:hover{filter:brightness(1.08)}
+.saved{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted);letter-spacing:.04em;margin-left:auto}
+
+section{margin-top:48px}
+.sec-head{display:flex;align-items:baseline;gap:14px;padding-bottom:9px;border-bottom:1px solid var(--rule-strong);margin-bottom:20px;flex-wrap:wrap}
+.sec-head .eyebrow{margin-left:auto}
+.lede{font-size:1rem;color:var(--ink-soft);max-width:70ch;margin-bottom:20px}
+.lede em{color:var(--ink);font-style:italic}
+.lede strong{color:var(--ink)}
+
+/* ---------- fields ---------- */
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field > label,.legend{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+input[type=text],input[type=date],textarea,select{font:inherit;font-size:.94rem;color:var(--ink);background:var(--surface);border:1px solid var(--rule-strong);border-radius:3px;padding:8px 10px;width:100%}
+textarea{min-height:68px;resize:vertical;line-height:1.5}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.85}
+fieldset{border:none;margin:0;padding:0;min-width:0}
+.choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{display:inline-block;font-size:.84rem;padding:5px 11px;border:1px solid var(--rule-strong);border-radius:20px;color:var(--ink-soft);background:var(--surface);cursor:pointer;user-select:none}
+.choice input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.choice input:focus-visible + span{outline:2px solid var(--signal);outline-offset:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+@media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.setup{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+@media(max-width:720px){.setup{grid-template-columns:1fr}}
+.setup .full{grid-column:1/-1}
+
+details.excerpt{background:var(--sunk);border:1px solid var(--rule);border-radius:3px;padding:12px 16px}
+details.excerpt summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--ink)}
+details.excerpt p{font-size:.93rem;color:var(--ink-soft);margin-top:10px;max-width:72ch}
+details.excerpt .fine{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.05em;color:var(--muted)}
+
+/* ---------- three questions strip ---------- */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:720px){.three{grid-template-columns:1fr}}
+.three div{border-top:3px solid var(--accent);background:var(--surface);border-left:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);border-radius:2px;padding:13px 15px}
+.three b{display:block;font-family:Newsreader,Georgia,serif;font-size:1.05rem;color:var(--ink);margin-bottom:3px}
+.three p{font-size:.88rem;color:var(--ink-soft)}
+
+/* ---------- channel cards ---------- */
+.chan{background:var(--surface);border:1px solid var(--rule);border-radius:3px;margin-bottom:14px;overflow:hidden}
+.chan-head{display:flex;align-items:baseline;gap:12px;padding:13px 18px;background:var(--sunk);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.chan-head .n{font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;color:var(--on-accent);background:var(--accent);border-radius:2px;padding:2px 8px;flex:none}
+.chan-head h3{flex:1 1 280px}
+.status{font-family:"IBM Plex Mono",monospace;font-size:.64rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid currentColor}
+.status.reg{color:var(--accent)}
+.status.open{color:var(--signal)}
+.chan-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.hint{font-size:.9rem;color:var(--ink-soft);max-width:76ch}
+.hint strong{color:var(--ink)}
+
+/* ---------- implementation ---------- */
+.impl{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.impl .panel h3{font-size:1.05rem}
+.impl .panel .hint{font-size:.87rem}
+
+/* ---------- rows (risk register, evidence plan) ---------- */
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;gap:10px;align-items:end;background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:12px 14px}
+.row.risk{grid-template-columns:2fr 1.4fr 1fr 150px auto}
+.row.ev{grid-template-columns:2fr 1.3fr 1.2fr auto}
+@media(max-width:860px){.row.risk,.row.ev{grid-template-columns:1fr}}
+.row .rm{align-self:end}
+.add{margin-top:10px}
+
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.tally span{font-family:"IBM Plex Mono",monospace;font-size:.74rem;padding:4px 10px;border-radius:2px;background:var(--accent-soft);color:var(--ink)}
+.warn{background:var(--signal-soft);border-left:3px solid var(--signal);padding:10px 14px;font-size:.92rem;color:var(--ink);border-radius:2px;max-width:76ch}
+
+/* ---------- stakeholders ---------- */
+.stk{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.stk .panel{gap:9px}
+.stk .who{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.stk .who h3{font-size:1.02rem}
+.req{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.req.un{color:var(--signal)}
+.stk .q{font-size:.9rem;color:var(--ink-soft)}
+
+/* ---------- commitments ---------- */
+ol.commit{margin:0;padding:0;list-style:none;counter-reset:k;display:flex;flex-direction:column;gap:12px}
+ol.commit li{counter-increment:k;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+ol.commit li::before{content:counter(k);font-family:"IBM Plex Mono",monospace;font-size:.75rem;font-weight:600;color:var(--on-accent);background:var(--accent);border-radius:2px;padding:3px 9px;margin-top:22px}
+
+/* ---------- summary ---------- */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.stat .v{font-family:Newsreader,Georgia,serif;font-size:1.7rem;font-weight:600;line-height:1.1;color:var(--ink)}
+.stat .l{font-size:.86rem;color:var(--ink-soft)}
+.stat.flag{border-left:3px solid var(--signal)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.note{font-size:.88rem;color:var(--muted);margin-top:10px;max-width:72ch}
+
+.callout{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--signal);border-radius:2px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.callout .tag{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--signal)}
+.callout p{font-size:.94rem;color:var(--ink-soft);max-width:70ch}
+.callout p strong{color:var(--ink)}
+
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:.84rem;color:var(--muted);max-width:72ch;display:flex;flex-direction:column;gap:8px}
+
+/* ---------- printed brief ---------- */
+#brief{display:none}
+@media print{
+  @page{margin:12mm 13mm}
+  :root{--ink:#111;--ink-soft:#333;--muted:#555;--rule:#bbb;--accent:#1d4e6f;--signal:#8c6014}
+  body{background:#fff;color:#111;font-size:8.6pt;line-height:1.35}
+  .page{display:none}
+  #brief{display:block}
+  #brief h1{font-size:15pt;margin:0}
+  #brief .bmeta{font-family:"IBM Plex Mono",monospace;font-size:7pt;color:#555;margin:2pt 0 6pt;border-bottom:1.5pt solid #111;padding-bottom:4pt}
+  #brief h2{font-family:"IBM Plex Mono",monospace;font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:#1d4e6f;margin:7pt 0 3pt;font-weight:600}
+  #brief table{width:100%;border-collapse:collapse;table-layout:fixed}
+  #brief th,#brief td{border:.5pt solid #bbb;padding:2.5pt 4pt;vertical-align:top;text-align:left;font-size:7.8pt;overflow-wrap:anywhere}
+  #brief th{background:#eef2f5;font-weight:600}
+  #brief .gap{color:#8c6014;font-weight:600}
+  #brief ul,#brief ol{margin:0;padding-left:13pt}
+  #brief li{margin:0 0 1pt}
+  #brief .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 12pt}
+  #brief .foot{margin-top:7pt;border-top:.5pt solid #bbb;padding-top:3pt;font-size:6.8pt;color:#555}
+  #brief tr,#brief li{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <p class="eyebrow">The Friction Audit &middot; Participant Takeaway</p>
+  <h1>Phone Policy Friction Audit</h1>
+  <p class="deck-line">Your policy, or the ISBE template, run against five channels. Illinois Public Act 104-0657 regulates the first, exempts the second, and does not mention the other three. <em>A compliant policy is a record that a decision was made. This audit asks what the record leaves open.</em></p>
+  <div class="origin">
+    <span>PD365 &middot; October 27, 2026</span><span>Micah Miner, M.Ed., Ed.S., CETL</span><span>Saved in this browser only</span>
+  </div>
+</header>
+
+<div class="toolbar" role="region" aria-label="Audit actions">
+  <button type="button" class="btn" data-act="print">Print the brief</button>
+  <button type="button" class="btn ghost" data-act="download">Download Markdown</button>
+  <button type="button" class="btn quiet" data-act="clear">Clear all entries</button>
+  <span class="saved" id="saved" aria-live="polite"></span>
+</div>
+
+<noscript><p class="lede" style="margin-top:24px"><strong>This audit needs JavaScript to save and print your entries.</strong> The <a href="../crosswalk/">Policy-to-Practice Crosswalk</a> works without it.</p></noscript>
+
+<section aria-labelledby="h-setup">
+  <div class="sec-head"><h2 id="h-setup">Before you start</h2><span class="eyebrow">Two minutes</span></div>
+  <p class="lede">Work as a team, with the text in front of you. Everything you type stays in this browser. Nothing is sent anywhere, and clearing your browser&rsquo;s site data erases it, so download or print before you close the tab.</p>
+  <div class="panel setup">
+    <div class="field">
+      <label for="f-team">District or team <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input type="text" id="f-team" data-k="meta.team" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="f-date">Date of this audit</label>
+      <input type="date" id="f-date" data-k="meta.date">
+    </div>
+    <fieldset class="full">
+      <legend class="legend">The text we are auditing</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="meta.source" value="Our adopted policy"><span>Our adopted policy</span></label>
+        <label class="choice"><input type="radio" name="meta.source" value="Our draft policy"><span>Our draft policy</span></label>
+        <label class="choice"><input type="radio" name="meta.source" value="ISBE Model Cell Phone Policy (August 2026)"><span>The ISBE template</span></label>
+        <label class="choice"><input type="radio" name="meta.source" value="The practice excerpt"><span>The practice excerpt</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="full">
+      <legend class="legend">Which clock we are on</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="meta.clock" value="Policy due by the 2027-28 school year"><span>Policy due by 2027&ndash;28</span></label>
+        <label class="choice"><input type="radio" name="meta.clock" value="Qualifying existing policy, may continue through 2030-31"><span>Existing policy, may hold through 2030&ndash;31</span></label>
+        <label class="choice"><input type="radio" name="meta.clock" value="Not sure yet"><span>Not sure yet</span></label>
+      </div>
+      <p class="hint" style="margin-top:8px;font-size:.86rem">A district whose policy before July 28, 2026 already limited devices for most or all of the school day may keep it through 2030&ndash;31.</p>
+    </fieldset>
+    <details class="excerpt full">
+      <summary>No policy in hand? Audit this practice excerpt</summary>
+      <p>During instruction, personal phones stay in classroom storage. Class tasks move to district laptops. Students may use an enabled AI feature to draft a response before reading the sources. The school reviews phone referrals each month and describes fewer referrals as evidence that learning has improved. An approved support may be retrieved through the office, but the procedure names no backup if the office route is unavailable.</p>
+      <p class="fine">A fictional excerpt for practice. Not a model policy. It touches all five channels and settles none of them well.</p>
+    </details>
+  </div>
+</section>
+
+<section aria-labelledby="h-chan">
+  <div class="sec-head"><h2 id="h-chan">Five channels, three questions</h2><span class="eyebrow">The core of the audit</span></div>
+  <div class="three">
+    <div><b>What does our policy actually say?</b><p>Quote it if you can. &ldquo;Nothing&rdquo; is a legitimate and common answer, and it is a finding.</p></div>
+    <div><b>What is the gap?</b><p>The distance between what the text says and what happens in a classroom on an ordinary Tuesday.</p></div>
+    <div><b>Who owns it, and by when?</b><p>A name, not a committee, and a date. A gap with no owner is the most common result.</p></div>
+  </div>
+  <div id="channels"></div>
+</section>
+
+<section aria-labelledby="h-impl">
+  <div class="sec-head"><h2 id="h-impl">Five implementation questions</h2><span class="eyebrow">What the template leaves to you</span></div>
+  <p class="lede">The ISBE template settles the definition, the required exceptions, and the limits on enforcement. It does not settle how any of it runs on a school day. Mark each question <em>decided</em> only when you could describe the answer to a parent.</p>
+  <div class="impl" id="impl"></div>
+</section>
+
+<section aria-labelledby="h-risk">
+  <div class="sec-head"><h2 id="h-risk">Access risk register</h2><span class="eyebrow">Before conditions change</span></div>
+  <p class="lede">A quiet classroom can still exclude a learner. Name each risk as a specific student situation rather than a group label, then give it an owner and a date to check it.</p>
+  <div class="rows" id="risks"></div>
+  <button type="button" class="btn ghost add" data-act="add-risk">Add a risk</button>
+</section>
+
+<section aria-labelledby="h-stk">
+  <div class="sec-head"><h2 id="h-stk">Stakeholder conversations</h2><span class="eyebrow">Section 10-20.88(f)</span></div>
+  <p class="lede">The statute requires input from the teachers&rsquo; bargaining agent (if the district has one), administrators, and parents or guardians when the policy is written and at each review, and it encourages student input. Two conversations the work depends on are not named at all.</p>
+  <div class="stk" id="stakeholders"></div>
+  <div class="panel" style="margin-top:12px">
+    <div class="field">
+      <label for="f-stk-first">Which conversation comes first, and who leads it?</label>
+      <textarea id="f-stk-first" data-k="stake.first"></textarea>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-ev">
+  <div class="sec-head"><h2 id="h-ev">Evidence plan</h2><span class="eyebrow">Keep three questions apart</span></div>
+  <p class="lede">Write what you will actually collect, not what you would like to know. Then sort each measure by the question it answers. <strong>Is the restriction workable?</strong> is implementation. <strong>Can students participate?</strong> is access. <strong>What can students explain or do?</strong> is learning.</p>
+  <div class="tally" id="ev-tally" aria-live="polite"></div>
+  <p class="warn" id="ev-warn" hidden>No learning measure yet. Confiscation counts, enforcement time, and exception requests show whether the policy is running. None of them shows whether students can explain or do more than before.</p>
+  <div class="rows" id="evidence"></div>
+  <button type="button" class="btn ghost add" data-act="add-ev">Add a measure</button>
+</section>
+
+<section aria-labelledby="h-commit">
+  <div class="sec-head"><h2 id="h-commit">Five commitments that fit in one motion</h2><span class="eyebrow">For the adopting vote</span></div>
+  <p class="lede">These are not a new initiative. They are five sentences a board can attach to a vote it is already taking.</p>
+  <ol class="commit" id="commitments"></ol>
+</section>
+
+<section aria-labelledby="h-sum">
+  <div class="sec-head"><h2 id="h-sum">Where the audit stands</h2><span class="eyebrow">Updates as you type</span></div>
+  <div class="summary" id="summary" aria-live="polite"></div>
+  <div class="actions">
+    <button type="button" class="btn" data-act="print">Print the brief</button>
+    <button type="button" class="btn ghost" data-act="download">Download Markdown</button>
+  </div>
+  <p class="note">The brief condenses every entry onto one page for a cabinet agenda or board packet. Long answers may run to a second page. In the print dialog, choose Save as PDF to keep a file.</p>
+  <div class="callout">
+    <span class="tag">The claim to avoid</span>
+    <p>This audit will not tell you whether a phone policy worked, and nothing will for at least a year. Falling confiscation counts answer whether the restriction is workable. <strong>They say nothing about what students can explain or do.</strong> Make claims no stronger than the evidence permits; you will be quoted on them.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Grounded in Illinois Public Act 104-0657 (SB 2427), signed and effective July 28, 2026, 105 ILCS 5/10-20.88, and the ISBE <em>Model Cell Phone Policy</em> (August 2026). ISBE&rsquo;s toolkit is expressly informational and not legal advice. Verify current statutory language with district counsel before adopting policy.</p>
+  <p>Companion takeaways: the <a href="../crosswalk/">Policy-to-Practice Crosswalk</a> and the <a href="../resources/">Illinois Resource Set</a>. The argument behind the audit: <a href="https://minerclass.github.io/screen-time-wrong-question/pouch-and-bypass/">The Pouch and the Bypass</a>.</p>
+  <p>Micah Miner, M.Ed., Ed.S., CETL &middot; admin@micahminer.com &middot; <a href="../">The Friction Audit materials</a></p>
+</footer>
+
+</div>
+
+<div id="brief" aria-hidden="true"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORE = "pd365-friction-audit:standalone:v1";
+
+  var CHANNELS = [
+    { id:"c1", n:"01", title:"Personal phones, wearables, and personal computing devices",
+      status:"Regulated", cls:"reg",
+      hint:"<strong>Regulated bell to bell.</strong> The statute requires exceptions for medical need, IEP and 504 plans and other written accommodation plans, English learners who need the device to access learning materials, student caregivers on a case-by-case basis, and anything other law requires.",
+      says:"What our policy says" },
+    { id:"c2", n:"02", title:"District-issued devices during the school day",
+      status:"Exempt by definition", cls:"open",
+      hint:"<strong>Exempt, and present in every classroom.</strong> The statute excludes any device a district or teacher has issued to, provided for, or required a student to use for educational purposes. If the concern was attention, the device you issued is still on the desk.",
+      says:"What our policy says" },
+    { id:"c3", n:"03", title:"Platform defaults and AI features",
+      status:"Not mentioned", cls:"open",
+      hint:"<strong>The statute regulates devices, not software.</strong> Open the approved platform as a student and write down what it offers first. That takes a few minutes, and few districts have done it.",
+      says:"What happens when a student opens the approved tool" },
+    { id:"c4", n:"04", title:"Take-home access",
+      status:"Not mentioned", cls:"open",
+      hint:"<strong>School time ends at dismissal.</strong> What the district device does after that, and who decided, sits outside the policy entirely.",
+      says:null },
+    { id:"c5", n:"05", title:"What assignments ask students to produce",
+      status:"Not mentioned", cls:"open",
+      hint:"<strong>No device policy reaches the task.</strong> Look at a recent assignment and ask whether it requires reasoning a student has to do, or a product a tool can deliver.",
+      says:null }
+  ];
+
+  var COVERAGE = ["Addressed","Partly","Silent","Not sure"];
+
+  var KINDS = [
+    ["", "Choose one (optional)"],
+    ["exclusionary", "Exclusionary: blocks participation without adding learning"],
+    ["removed", "Friction removed: a default does the work students should do"],
+    ["unprotected", "Productive but unprotected: difficulty worth keeping has no protection"],
+    ["logistics", "Logistics: workable or not, with no learning stake"],
+    ["unsure", "Not sure yet"]
+  ];
+
+  var IMPL = [
+    { id:"storage", title:"Storage",
+      q:"Lockers, backpacks, classroom holders, locked pouches, or the office. Each carries a different cost, a different liability question, and a different daily time tax on teachers. Which one, who pays, and who handles it every period?" },
+    { id:"enforcement", title:"Enforcement",
+      q:"Who collects, stores, returns, and escalates? Fees, fines, suspension, expulsion, and police are off the table for a violation alone. If a parent must retrieve a device, what is the alternative for a guardian who cannot come in person?" },
+    { id:"exceptions", title:"Exceptions",
+      q:"Who determines a case-by-case caregiver exception, and on what timeline? How does a student request any exception without announcing their circumstances to a class?" },
+    { id:"access", title:"Access",
+      q:"Which students depend on a device the rule could sweep in, for translation, text-to-speech, organization, or contact with family? Who checks that their supports survive before the policy takes effect?" },
+    { id:"communication", title:"Communication",
+      q:"Families hear “my child cannot reach me” before they hear anything about attention or learning. How does a family reach a student in an emergency, who drafts the letter, and when does it go out?" }
+  ];
+
+  var STAKE = [
+    { id:"bargaining", who:"Bargaining agent", req:"Required", q:"What workload, role, training, or procedure needs consultation before the policy changes it?" },
+    { id:"admins", who:"Administrators", req:"Required", q:"Who owns implementation, exceptions, feedback, and the review of enforcement data?" },
+    { id:"families", who:"Parents or guardians", req:"Required", q:"How do contact, approved needs, retrieval, and the backup route work on an ordinary day?" },
+    { id:"students", who:"Students", req:"Encouraged", q:"When does the routine help learning or participation, and what would make the access route usable?" },
+    { id:"teaching", who:"Teaching teams", req:"Not named", q:"Which tasks change, and what time or duty comes off the calendar to make room?" },
+    { id:"tech", who:"Technology office", req:"Not named", q:"Which defaults can be changed, who has the authority, and what cannot be configured at all?" }
+  ];
+
+  var COMMIT = [
+    ["k1", "Who is accountable for instructional follow-through?", "A name, not a committee."],
+    ["k2", "What planning time is protected, and what comes off the calendar to make room?", ""],
+    ["k3", "Who reviews access before conditions change, and by when?", ""],
+    ["k4", "Who checks what the approved platforms do by default?", ""],
+    ["k5", "What date does the cabinet look at this again?", ""]
+  ];
+
+  var EVK = [
+    ["", "Choose one"],
+    ["implementation", "Implementation: is the restriction workable?"],
+    ["access", "Access: can students participate?"],
+    ["learning", "Learning: what can students explain or do?"]
+  ];
+
+  /* ---------- state ---------- */
+  function blank(){
+    var s = { meta:{}, ch:{}, impl:{}, risks:[], stake:{}, evidence:[], commit:{}, updated:"" };
+    CHANNELS.forEach(function(c){ s.ch[c.id] = {}; });
+    IMPL.forEach(function(i){ s.impl[i.id] = {}; });
+    return s;
+  }
+  var state = blank();
+
+  function load(){
+    try {
+      var raw = window.localStorage.getItem(STORE);
+      if (!raw) return;
+      var got = JSON.parse(raw);
+      if (!got || typeof got !== "object") return;
+      var b = blank();
+      ["meta","stake","commit"].forEach(function(k){ if (got[k] && typeof got[k] === "object") b[k] = got[k]; });
+      CHANNELS.forEach(function(c){ if (got.ch && got.ch[c.id]) b.ch[c.id] = got.ch[c.id]; });
+      IMPL.forEach(function(i){ if (got.impl && got.impl[i.id]) b.impl[i.id] = got.impl[i.id]; });
+      if (Array.isArray(got.risks)) b.risks = got.risks;
+      if (Array.isArray(got.evidence)) b.evidence = got.evidence;
+      b.updated = got.updated || "";
+      state = b;
+    } catch (e) { /* storage unavailable: the page still works for this visit */ }
+  }
+
+  var savedEl = document.getElementById("saved");
+  var saveTimer = null;
+  function save(){
+    state.updated = new Date().toISOString();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try {
+        window.localStorage.setItem(STORE, JSON.stringify(state));
+        savedEl.textContent = "Saved in this browser " + new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit" });
+      } catch (e) {
+        savedEl.textContent = "This browser is not saving entries. Download or print before you leave.";
+      }
+    }, 350);
+    summarize();
+  }
+
+  function getPath(path){
+    var parts = path.split("."), o = state;
+    for (var i = 0; i < parts.length; i++){ if (o == null) return ""; o = o[parts[i]]; }
+    return o == null ? "" : o;
+  }
+  function setPath(path, val){
+    var parts = path.split("."), o = state;
+    for (var i = 0; i < parts.length - 1; i++){
+      if (o[parts[i]] == null || typeof o[parts[i]] !== "object") o[parts[i]] = {};
+      o = o[parts[i]];
+    }
+    o[parts[parts.length - 1]] = val;
+  }
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  /* ---------- render static structures ---------- */
+  function radios(name, values){
+    return '<div class="choices">' + values.map(function(v){
+      return '<label class="choice"><input type="radio" name="' + name + '" value="' + esc(v) + '"><span>' + esc(v) + '</span></label>';
+    }).join("") + '</div>';
+  }
+
+  document.getElementById("channels").innerHTML = CHANNELS.map(function(c){
+    var p = "ch." + c.id + ".";
+    return '<article class="chan" aria-labelledby="t-' + c.id + '">' +
+      '<div class="chan-head"><span class="n">' + c.n + '</span><h3 id="t-' + c.id + '">' + esc(c.title) + '</h3>' +
+      '<span class="status ' + c.cls + '">' + esc(c.status) + '</span></div>' +
+      '<div class="chan-body">' +
+        '<p class="hint">' + c.hint + '</p>' +
+        '<fieldset><legend class="legend">How well our text covers this channel</legend>' + radios(p + "cov", COVERAGE) + '</fieldset>' +
+        (c.says ? '<div class="field"><label for="' + c.id + '-says">' + esc(c.says) + '</label><textarea id="' + c.id + '-says" data-k="' + p + 'says"></textarea></div>' : "") +
+        '<div class="grid2">' +
+          '<div class="field"><label for="' + c.id + '-gap">The gap</label><textarea id="' + c.id + '-gap" data-k="' + p + 'gap"></textarea></div>' +
+          '<div class="field"><label for="' + c.id + '-kind">What kind of friction is the gap?</label><select id="' + c.id + '-kind" data-k="' + p + 'kind">' +
+            KINDS.map(function(k){ return '<option value="' + k[0] + '">' + esc(k[1]) + '</option>'; }).join("") +
+          '</select></div>' +
+        '</div>' +
+        '<div class="grid2">' +
+          '<div class="field"><label for="' + c.id + '-owner">Owner</label><input type="text" id="' + c.id + '-owner" data-k="' + p + 'owner" autocomplete="off"></div>' +
+          '<div class="field"><label for="' + c.id + '-date">By when</label><input type="date" id="' + c.id + '-date" data-k="' + p + 'date"></div>' +
+        '</div>' +
+      '</div></article>';
+  }).join("");
+
+  document.getElementById("impl").innerHTML = IMPL.map(function(i){
+    var p = "impl." + i.id + ".";
+    return '<div class="panel"><h3>' + esc(i.title) + '</h3><p class="hint">' + esc(i.q) + '</p>' +
+      '<div class="field"><label for="i-' + i.id + '">Our answer</label><textarea id="i-' + i.id + '" data-k="' + p + 'ans"></textarea></div>' +
+      '<fieldset><legend class="legend">Status</legend>' + radios(p + "status", ["Decided","Open"]) + '</fieldset></div>';
+  }).join("");
+
+  document.getElementById("stakeholders").innerHTML = STAKE.map(function(s){
+    return '<div class="panel"><div class="who"><h3>' + esc(s.who) + '</h3><span class="req' + (s.req === "Not named" ? " un" : "") + '">' + esc(s.req) + '</span></div>' +
+      '<p class="q">' + esc(s.q) + '</p>' +
+      '<div class="field"><label for="s-' + s.id + '">Who leads it, and when</label><input type="text" id="s-' + s.id + '" data-k="stake.' + s.id + '" autocomplete="off"></div></div>';
+  }).join("");
+
+  document.getElementById("commitments").innerHTML = COMMIT.map(function(k){
+    return '<li><div class="field"><label for="c-' + k[0] + '" style="text-transform:none;letter-spacing:0;font-family:Newsreader,Georgia,serif;font-size:1.05rem;color:var(--ink)">' + esc(k[1]) + '</label>' +
+      (k[2] ? '<span class="hint" style="font-size:.86rem">' + esc(k[2]) + '</span>' : "") +
+      (k[0] === "k5" ? '<input type="date" id="c-' + k[0] + '" data-k="commit.' + k[0] + '">' : '<textarea id="c-' + k[0] + '" data-k="commit.' + k[0] + '" style="min-height:52px"></textarea>') +
+      '</div></li>';
+  }).join("");
+
+  /* ---------- dynamic rows ---------- */
+  var risksEl = document.getElementById("risks");
+  var evEl = document.getElementById("evidence");
+
+  function drawRisks(){
+    if (!state.risks.length) state.risks.push({});
+    risksEl.innerHTML = state.risks.map(function(r, n){
+      var id = "r" + n;
+      return '<div class="row risk" role="group" aria-label="Risk ' + (n + 1) + '">' +
+        '<div class="field"><label for="' + id + 'a">The risk</label><input type="text" id="' + id + 'a" data-r="risks" data-i="' + n + '" data-f="risk" value="' + esc(r.risk) + '" autocomplete="off"></div>' +
+        '<div class="field"><label for="' + id + 'b">Who is affected</label><input type="text" id="' + id + 'b" data-r="risks" data-i="' + n + '" data-f="who" value="' + esc(r.who) + '" autocomplete="off"></div>' +
+        '<div class="field"><label for="' + id + 'c">Owner</label><input type="text" id="' + id + 'c" data-r="risks" data-i="' + n + '" data-f="owner" value="' + esc(r.owner) + '" autocomplete="off"></div>' +
+        '<div class="field"><label for="' + id + 'd">Check by</label><input type="date" id="' + id + 'd" data-r="risks" data-i="' + n + '" data-f="date" value="' + esc(r.date) + '"></div>' +
+        '<button type="button" class="btn quiet rm" data-act="rm-risk" data-i="' + n + '" aria-label="Remove risk ' + (n + 1) + '">Remove</button>' +
+      '</div>';
+    }).join("");
+  }
+
+  function drawEvidence(){
+    if (!state.evidence.length) state.evidence.push({});
+    evEl.innerHTML = state.evidence.map(function(r, n){
+      var id = "e" + n;
+      return '<div class="row ev" role="group" aria-label="Measure ' + (n + 1) + '">' +
+        '<div class="field"><label for="' + id + 'a">What we will collect</label><input type="text" id="' + id + 'a" data-r="evidence" data-i="' + n + '" data-f="what" value="' + esc(r.what) + '" autocomplete="off"></div>' +
+        '<div class="field"><label for="' + id + 'b">The question it answers</label><select id="' + id + 'b" data-r="evidence" data-i="' + n + '" data-f="kind">' +
+          EVK.map(function(k){ return '<option value="' + k[0] + '"' + (r.kind === k[0] ? " selected" : "") + '>' + esc(k[1]) + '</option>'; }).join("") +
+        '</select></div>' +
+        '<div class="field"><label for="' + id + 'c">Who collects it, and when</label><input type="text" id="' + id + 'c" data-r="evidence" data-i="' + n + '" data-f="who" value="' + esc(r.who) + '" autocomplete="off"></div>' +
+        '<button type="button" class="btn quiet rm" data-act="rm-ev" data-i="' + n + '" aria-label="Remove measure ' + (n + 1) + '">Remove</button>' +
+      '</div>';
+    }).join("");
+  }
+
+  /* ---------- fill the form from state ---------- */
+  function fill(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-k]"), function(el){
+      el.value = getPath(el.getAttribute("data-k"));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.page input[type=radio]'), function(el){
+      el.checked = getPath(el.name) === el.value;
+    });
+    drawRisks();
+    drawEvidence();
+    summarize();
+  }
+
+  /* ---------- input handling ---------- */
+  document.addEventListener("input", onEdit);
+  document.addEventListener("change", onEdit);
+  function onEdit(e){
+    var el = e.target;
+    if (!el || !el.closest || !el.closest(".page")) return;
+    if (el.type === "radio"){
+      if (el.checked){ setPath(el.name, el.value); save(); }
+      return;
+    }
+    if (el.hasAttribute("data-k")){
+      setPath(el.getAttribute("data-k"), el.value); save(); return;
+    }
+    if (el.hasAttribute("data-r")){
+      var list = state[el.getAttribute("data-r")], i = +el.getAttribute("data-i");
+      if (list && list[i]){ list[i][el.getAttribute("data-f")] = el.value; save(); }
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-act]") : null;
+    if (!b) return;
+    var act = b.getAttribute("data-act"), i = +b.getAttribute("data-i");
+    if (act === "print"){ buildBrief(); window.print(); }
+    else if (act === "download"){ download(); }
+    else if (act === "clear"){
+      if (window.confirm("Clear every entry on this page? This cannot be undone. Download or print first if you want a copy.")){
+        state = blank();
+        try { window.localStorage.removeItem(STORE); } catch (err) {}
+        fill();
+        savedEl.textContent = "Entries cleared.";
+      }
+    }
+    else if (act === "add-risk"){ state.risks.push({}); drawRisks(); save(); focusLast(risksEl); }
+    else if (act === "rm-risk"){ state.risks.splice(i, 1); drawRisks(); save(); }
+    else if (act === "add-ev"){ state.evidence.push({}); drawEvidence(); save(); focusLast(evEl); }
+    else if (act === "rm-ev"){ state.evidence.splice(i, 1); drawEvidence(); save(); }
+  });
+
+  function focusLast(container){
+    var rows = container.querySelectorAll(".row");
+    var f = rows.length ? rows[rows.length - 1].querySelector("input,select") : null;
+    if (f) f.focus();
+  }
+
+  window.addEventListener("beforeprint", buildBrief);
+
+  /* ---------- summary ---------- */
+  function filled(v){ return String(v || "").trim() !== ""; }
+  function kindLabel(v){
+    for (var i = 0; i < KINDS.length; i++) if (KINDS[i][0] === v) return KINDS[i][1].split(":")[0];
+    return "";
+  }
+
+  function tallyEvidence(){
+    var t = { implementation:0, access:0, learning:0, unsorted:0 };
+    state.evidence.forEach(function(r){
+      if (!filled(r.what) && !r.kind) return;
+      if (t.hasOwnProperty(r.kind)) t[r.kind]++; else t.unsorted++;
+    });
+    return t;
+  }
+
+  function summarize(){
+    var owned = 0, uncovered = [];
+    CHANNELS.forEach(function(c){
+      var d = state.ch[c.id] || {};
+      if (filled(d.owner) && filled(d.date)) owned++;
+      if (d.cov !== "Addressed") uncovered.push(c.n);
+    });
+    var open = IMPL.filter(function(i){ return (state.impl[i.id] || {}).status !== "Decided"; }).length;
+    var risks = state.risks.filter(function(r){ return filled(r.risk); });
+    var riskOwned = risks.filter(function(r){ return filled(r.owner) && filled(r.date); }).length;
+    var t = tallyEvidence();
+    var review = state.commit && state.commit.k5;
+
+    var stats = [
+      { v: owned + " of 5", l: "channels with a named owner and a date", flag: owned < 5 },
+      { v: uncovered.length + " of 5", l: "channels our text does not fully address" + (uncovered.length ? " (" + uncovered.join(", ") + ")" : ""), flag: uncovered.length > 0 },
+      { v: open + " of 5", l: "implementation questions still open", flag: open > 0 },
+      { v: riskOwned + " of " + risks.length, l: "access risks with an owner and a check date", flag: risks.length > 0 && riskOwned < risks.length },
+      { v: String(t.learning), l: "learning measures in the evidence plan", flag: t.learning === 0 },
+      { v: review ? fmtDate(review) : "Not set", l: "date the cabinet returns to this", flag: !review }
+    ];
+    document.getElementById("summary").innerHTML = stats.map(function(s){
+      return '<div class="stat' + (s.flag ? " flag" : "") + '"><span class="v">' + esc(s.v) + '</span><span class="l">' + esc(s.l) + '</span></div>';
+    }).join("");
+
+    document.getElementById("ev-tally").innerHTML =
+      '<span>Implementation ' + t.implementation + '</span><span>Access ' + t.access + '</span><span>Learning ' + t.learning + '</span>' +
+      (t.unsorted ? '<span>Not yet sorted ' + t.unsorted + '</span>' : "");
+    document.getElementById("ev-warn").hidden = !(t.learning === 0 && (t.implementation + t.access + t.unsorted) > 0);
+  }
+
+  function fmtDate(iso){
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return iso || "";
+    var p = iso.split("-");
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return d.toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+  }
+  function today(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  /* ---------- printed brief ---------- */
+  function cell(v, fallback){ return filled(v) ? esc(v).replace(/\n/g, "<br>") : '<span class="gap">' + (fallback || "None recorded") + '</span>'; }
+
+  function buildBrief(){
+    var m = state.meta || {};
+    var h = [];
+    h.push('<h1>Phone Policy Friction Audit' + (filled(m.team) ? ": " + esc(m.team) : "") + '</h1>');
+    h.push('<p class="bmeta">' + [
+      "Audited: " + (filled(m.source) ? esc(m.source) : "text not recorded"),
+      filled(m.clock) ? esc(m.clock) : "Clock not recorded",
+      "Date: " + esc(fmtDate(m.date || today())),
+      "Public Act 104-0657, 105 ILCS 5/10-20.88"
+    ].join(" &middot; ") + '</p>');
+
+    h.push('<h2>Five channels</h2><table><thead><tr><th style="width:17%">Channel</th><th style="width:9%">Coverage</th><th style="width:22%">What the text says</th><th>The gap</th><th style="width:12%">Friction</th><th style="width:15%">Owner, by when</th></tr></thead><tbody>');
+    CHANNELS.forEach(function(c){
+      var d = state.ch[c.id] || {};
+      var owner = filled(d.owner) ? esc(d.owner) + (filled(d.date) ? ", " + esc(fmtDate(d.date)) : ', <span class="gap">no date</span>') : '<span class="gap">No owner</span>';
+      h.push('<tr><td>' + c.n + " " + esc(c.title) + '<br><em>' + esc(c.status) + '</em></td><td>' + cell(d.cov, "Not marked") + '</td><td>' +
+        (c.says ? cell(d.says, "Nothing recorded") : "<em>Outside the policy</em>") + '</td><td>' + cell(d.gap) + '</td><td>' + (d.kind ? esc(kindLabel(d.kind)) : "") + '</td><td>' + owner + '</td></tr>');
+    });
+    h.push('</tbody></table>');
+
+    h.push('<h2>Implementation questions</h2><table><tbody>');
+    IMPL.forEach(function(i){
+      var d = state.impl[i.id] || {};
+      h.push('<tr><td style="width:15%">' + esc(i.title) + '</td><td style="width:9%">' + (d.status === "Decided" ? "Decided" : '<span class="gap">Open</span>') + '</td><td>' + cell(d.ans, "No answer yet") + '</td></tr>');
+    });
+    h.push('</tbody></table>');
+
+    h.push('<div class="cols"><div>');
+    var risks = state.risks.filter(function(r){ return filled(r.risk); });
+    h.push('<h2>Access risks</h2>');
+    if (risks.length){
+      h.push('<ul>' + risks.map(function(r){
+        return '<li>' + esc(r.risk) + (filled(r.who) ? " (" + esc(r.who) + ")" : "") + ". " +
+          (filled(r.owner) ? esc(r.owner) : '<span class="gap">No owner</span>') + (filled(r.date) ? ", by " + esc(fmtDate(r.date)) : "") + '</li>';
+      }).join("") + '</ul>');
+    } else { h.push('<p><span class="gap">No risks recorded.</span></p>'); }
+
+    h.push('<h2>Stakeholder conversations</h2><ul>');
+    STAKE.forEach(function(s){
+      var v = state.stake && state.stake[s.id];
+      h.push('<li>' + esc(s.who) + " (" + esc(s.req.toLowerCase()) + "): " + cell(v, "not planned") + '</li>');
+    });
+    h.push('</ul>');
+    if (filled(state.stake && state.stake.first)) h.push('<p><strong>First:</strong> ' + esc(state.stake.first) + '</p>');
+    h.push('</div><div>');
+
+    var t = tallyEvidence();
+    h.push('<h2>Evidence plan</h2><p>Implementation ' + t.implementation + " &middot; Access " + t.access + " &middot; Learning " + (t.learning ? t.learning : '<span class="gap">0</span>') + (t.unsorted ? " &middot; Not sorted " + t.unsorted : "") + '</p>');
+    var ev = state.evidence.filter(function(r){ return filled(r.what); });
+    if (ev.length){
+      h.push('<ul>' + ev.map(function(r){
+        var k = r.kind ? r.kind.charAt(0).toUpperCase() + r.kind.slice(1) : "Not sorted";
+        return '<li>' + esc(r.what) + " [" + esc(k) + "]" + (filled(r.who) ? ". " + esc(r.who) : "") + '</li>';
+      }).join("") + '</ul>');
+    }
+
+    h.push('<h2>Five commitments for the motion</h2><ol>');
+    var short = ["Accountable for follow-through", "Protected planning time", "Access review", "Checks platform defaults", "Cabinet returns to this"];
+    COMMIT.forEach(function(k, n){
+      var v = state.commit && state.commit[k[0]];
+      h.push('<li><strong>' + short[n] + ':</strong> ' + (k[0] === "k5" && filled(v) ? esc(fmtDate(v)) : cell(v, "not set")) + '</li>');
+    });
+    h.push('</ol></div></div>');
+
+    h.push('<p class="foot">Keep three questions apart. Is the restriction workable (implementation)? Can students participate (access)? What can students explain or do (learning)? Falling confiscation counts answer the first and say nothing about the third. Statutory summary from Public Act 104-0657 and the ISBE Model Cell Phone Policy (August 2026), which is informational and not legal advice. The Friction Audit, PD365, October 27, 2026. minerclass.github.io/pd365-friction-audit</p>');
+
+    document.getElementById("brief").innerHTML = h.join("");
+  }
+
+  /* ---------- Markdown export ---------- */
+  function md(v){ return filled(v) ? String(v).trim() : "—"; }
+  function mdCell(v){ return md(v).replace(/\|/g, "\\|").replace(/\r?\n/g, "<br>"); }
+
+  function buildMarkdown(){
+    var m = state.meta || {}, L = [];
+    L.push("# Phone Policy Friction Audit" + (filled(m.team) ? ": " + m.team.trim() : ""));
+    L.push("");
+    L.push("The Friction Audit: What Your Phone Policy Cannot Do · PD365 · October 27, 2026");
+    L.push("");
+    L.push("Illinois Public Act 104-0657 (SB 2427), signed and effective July 28, 2026; policies due by 2027–28; qualifying existing policies may continue through 2030–31.");
+    L.push("");
+    L.push("- **Text audited:** " + md(m.source));
+    L.push("- **Clock:** " + md(m.clock));
+    L.push("- **Date:** " + (filled(m.date) ? fmtDate(m.date) : fmtDate(today())));
+    L.push("");
+    L.push("## Five channels");
+    L.push("");
+    CHANNELS.forEach(function(c){
+      var d = state.ch[c.id] || {};
+      L.push("### " + c.n + " " + c.title + " (" + c.status.toLowerCase() + ")");
+      L.push("");
+      L.push("- **Coverage:** " + md(d.cov));
+      if (c.says) L.push("- **" + c.says + ":** " + md(d.says));
+      L.push("- **The gap:** " + md(d.gap));
+      if (d.kind) L.push("- **Kind of friction:** " + kindLabel(d.kind));
+      L.push("- **Owner and date:** " + md(d.owner) + (filled(d.date) ? ", " + fmtDate(d.date) : ""));
+      L.push("");
+    });
+    L.push("## Implementation questions");
+    L.push("");
+    IMPL.forEach(function(i){
+      var d = state.impl[i.id] || {};
+      L.push("- **" + i.title + " (" + (d.status === "Decided" ? "decided" : "open") + "):** " + md(d.ans));
+    });
+    L.push("");
+    L.push("## Access risk register");
+    L.push("");
+    var risks = state.risks.filter(function(r){ return filled(r.risk) || filled(r.who) || filled(r.owner) || filled(r.date); });
+    if (risks.length){
+      L.push("| Risk | Who is affected | Owner | Check by |");
+      L.push("| --- | --- | --- | --- |");
+      risks.forEach(function(r){ L.push("| " + mdCell(r.risk) + " | " + mdCell(r.who) + " | " + mdCell(r.owner) + " | " + (filled(r.date) ? fmtDate(r.date) : "—") + " |"); });
+    } else { L.push("_No risks recorded._"); }
+    L.push("");
+    L.push("## Stakeholder conversations");
+    L.push("");
+    STAKE.forEach(function(s){ L.push("- **" + s.who + " (" + s.req.toLowerCase() + "):** " + md(state.stake && state.stake[s.id])); });
+    L.push("");
+    L.push("**Which conversation comes first, and who leads it:** " + md(state.stake && state.stake.first));
+    L.push("");
+    L.push("## Evidence plan");
+    L.push("");
+    var t = tallyEvidence();
+    L.push("Implementation " + t.implementation + " · Access " + t.access + " · Learning " + t.learning + (t.unsorted ? " · Not sorted " + t.unsorted : ""));
+    L.push("");
+    var ev = state.evidence.filter(function(r){ return filled(r.what) || r.kind; });
+    if (ev.length){
+      L.push("| What we will collect | Question it answers | Who collects it, and when |");
+      L.push("| --- | --- | --- |");
+      ev.forEach(function(r){
+        var k = ""; EVK.forEach(function(x){ if (x[0] === r.kind && r.kind) k = x[1]; });
+        L.push("| " + mdCell(r.what) + " | " + (k || "—") + " | " + mdCell(r.who) + " |");
+      });
+    } else { L.push("_No measures recorded._"); }
+    L.push("");
+    L.push("## Five commitments for the adopting motion");
+    L.push("");
+    COMMIT.forEach(function(k, n){
+      var v = state.commit && state.commit[k[0]];
+      L.push((n + 1) + ". **" + k[1] + "** " + (k[0] === "k5" && filled(v) ? fmtDate(v) : md(v)));
+    });
+    L.push("");
+    L.push("## Before claiming a result, keep three questions apart");
+    L.push("");
+    L.push("1. **Is the restriction workable?** Measures implementation.");
+    L.push("2. **Can students participate?** Measures access.");
+    L.push("3. **What can students explain or do?** Measures learning.");
+    L.push("");
+    L.push("Falling confiscation counts answer the first. They say nothing about the third.");
+    L.push("");
+    L.push("_ISBE's Model Cell Phone Policy (August 2026) is informational and not legal advice. Verify current statutory language with district counsel._");
+    L.push("");
+    return L.join("\n");
+  }
+
+  function download(){
+    var slug = (state.meta && state.meta.team ? state.meta.team : "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+    var name = "friction-audit" + (slug ? "-" + slug : "") + "-" + ((state.meta && state.meta.date) || today()) + ".md";
+    try {
+      var blob = new Blob([buildMarkdown()], { type:"text/markdown;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+      savedEl.textContent = "Downloaded " + name;
+    } catch (e) {
+      savedEl.textContent = "Download is not available here. Use Print the brief and choose Save as PDF.";
+    }
+  }
+
+  load();
+  fill();
+})();
+</script>
+</body>
+</html>
